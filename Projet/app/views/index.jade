@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  .breadcrumbs
+    .col-sm-4
+      .page-header.float-left
+        .page-title
+          h1 #{title}
+    .col-sm-8
+      .page-header.float-right
+        .page-title
+          ol.breadcrumb.text-right
+            li.active #{title}
+    
