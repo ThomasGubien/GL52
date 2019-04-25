@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
+const qcmRouter=require('./routes/qcm')
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
+app.use('/createQCM',qcmRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

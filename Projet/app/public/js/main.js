@@ -1,4 +1,5 @@
 $.noConflict();
+let nbclicks=0;
 
 jQuery(document).ready(function($) {
 
@@ -36,3 +37,31 @@ jQuery(document).ready(function($) {
 
 
 });
+
+function addAnswer(nbC) {
+    console.log('Add Answer clicked')
+    const div = document.createElement('div')
+
+    div.className = 'answer'
+
+    div.innerHTML =
+        `<input type="text" name="answer${nbC}" value="" />\
+        <label> <input type="checkbox" name="check${nbC}" value="" /> Correct Answer? </label>`
+
+    document.getElementsByClassName('question')[nbC].appendChild(div);
+  }   
+
+  function addQuestion() {
+    console.log('clicked')
+    const div = document.createElement('div')
+
+    div.className = 'question'
+
+    div.innerHTML =
+		`<label> Question </label>\
+		<input type="text" name="question" value="" />\
+		<input type="button" value="Add Answer" onclick="addAnswer(${nbclicks})">`
+
+	document.getElementById('qcm').appendChild(div);
+	nbclicks++
+  }  
