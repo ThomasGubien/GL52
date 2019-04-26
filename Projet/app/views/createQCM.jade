@@ -1,13 +1,23 @@
-extends createQCM_layout
+extends layout
+
 block content
-  .bg-black
-    .sufee-login.d-flex.align-content-center.flex-wrap
-      .container
-        .login-content
-          .login-logo
-            a(href='/')
-              img.align-content(src='images/logo.png', alt='')
-          .login-form
-            form(action='/createQCM/new', method='POST',id='qcm')
-            button.btn.btn-success.btn-flat.m-b-30.m-t-30(type='submit', form='qcm') Submit
-          input(type="button", value="Add Question",onclick="addQuestion()")
+  .breadcrumbs
+    .col-sm-4
+      .page-header.float-left
+        .page-title
+          h1 #{title}
+    .col-sm-8
+      .page-header.float-right
+        .page-title
+          ol.breadcrumb.text-right
+            li.active #{title}
+  .col-md-6.offset-md-3
+    .card
+      .card-header
+        strong New QCM
+      .card-body.card-block
+        input(type="button", value="Add Question",onclick="addQuestion()")
+        br 
+        br
+        form(action='/createQCM/new', method='POST',id='qcm')
+        button.btn.btn-lg.btn-info.btn-block(type='submit', form='qcm') Submit
