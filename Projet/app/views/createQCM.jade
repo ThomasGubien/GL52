@@ -1,0 +1,13 @@
+extends createQCM_layout
+block content
+  .bg-black
+    .sufee-login.d-flex.align-content-center.flex-wrap
+      .container
+        .login-content
+          .login-logo
+            a(href='/')
+              img.align-content(src='images/logo.png', alt='')
+          .login-form
+            form(action='/createQCM/new', method='POST',id='qcm')
+            button.btn.btn-success.btn-flat.m-b-30.m-t-30(type='submit', form='qcm') Submit
+          input(type="button", value="Add Question",onclick="addQuestion()")
