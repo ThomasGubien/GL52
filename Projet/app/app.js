@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
+const signupRouter = require('./routes/signup')
 var usersRouter = require('./routes/users');
 const qcmRouter=require('./routes/qcm')
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
+app.use('/signup',signupRouter)
 app.use('/users', usersRouter);
 app.use('/createQCM',qcmRouter)
 
