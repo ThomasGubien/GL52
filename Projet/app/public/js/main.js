@@ -64,4 +64,6 @@ function addAnswer(nbC) {
 
 	document.getElementById('qcm').appendChild(div);
 	nbclicks++
-  }  
+}  
+
+
