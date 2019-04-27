@@ -23,7 +23,7 @@ router.post('/new', async (req, res)=>{
     const questions=qcm.question.map((value,index)=>{
         return {question:value,answers:qcm[`answer${index}`]}
     })
-    const questionnaire={author:'Pierre',uv:'gl52',questions:questions}
+    const questionnaire={author:'5ca622b50a14fe182147ffdd',uv:'gl52',questions:questions,title:'test'}
     await collection.insertOne(questionnaire)
     client.close()
 })
