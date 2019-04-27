@@ -34,60 +34,33 @@ html
         .navbar-header
           button.navbar-toggler(type='button', data-toggle='collapse', data-target='#main-menu', aria-controls='main-menu', aria-expanded='false', aria-label='Toggle navigation')
             i.fa.fa-bars
-          a.navbar-brand(href='./')
+          a.navbar-brand(href='/')
             img(src='images/logo.png', alt='Logo')
-          a.navbar-brand.hidden(href='./')
+          a.navbar-brand.hidden(href='/')
             img(src='images/logo2.png', alt='Logo')
         #main-menu.main-menu.collapse.navbar-collapse
           ul.nav.navbar-nav
             li.active
-              a(href='index.html')
+              a(href='/')
                 i.menu-icon.fa.fa-dashboard
                 | Dashboard
-            h3.menu-title UI elements
+            h3.menu-title Evaluations
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 i.menu-icon.fa.fa-laptop
-                | Components
+                | QCM
               ul.sub-menu.children.dropdown-menu
                 li
                   i.fa.fa-puzzle-piece
-                  a(href='ui-buttons.html') Buttons
+                  a(href='/createQCM') Creation
                 li
                   i.fa.fa-id-badge
-                  a(href='ui-badges.html') Badges
-                li
-                  i.fa.fa-bars
-                  a(href='ui-tabs.html') Tabs
-                li
-                  i.fa.fa-share-square-o
-                  a(href='ui-social-buttons.html') Social Buttons
-                li
-                  i.fa.fa-id-card-o
-                  a(href='ui-cards.html') Cards
-                li
-                  i.fa.fa-exclamation-triangle
-                  a(href='ui-alerts.html') Alerts
-                li
-                  i.fa.fa-spinner
-                  a(href='ui-progressbar.html') Progress Bars
-                li
-                  i.fa.fa-fire
-                  a(href='ui-modals.html') Modals
-                li
-                  i.fa.fa-book
-                  a(href='ui-switches.html') Switches
-                li
-                  i.fa.fa-th
-                  a(href='ui-grids.html') Grids
-                li
-                  i.fa.fa-file-word-o
-                  a(href='ui-typgraphy.html') Typography
+                  a(href='#') Modification
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 i.menu-icon.fa.fa-table
-                | Tables
+                | Resultats
               ul.sub-menu.children.dropdown-menu
                 li
                   i.fa.fa-table
@@ -95,18 +68,7 @@ html
                 li
                   i.fa.fa-table
                   a(href='tables-data.html') Data Table
-            li.menu-item-has-children.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-th
-                | Forms
-              ul.sub-menu.children.dropdown-menu
-                li
-                  i.menu-icon.fa.fa-th
-                  a(href='forms-basic.html') Basic Form
-                li
-                  i.menu-icon.fa.fa-th
-                  a(href='forms-advanced.html') Advanced Form
-            h3.menu-title Icons
+            h3.menu-title Utilisateurs
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
