@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
-const fs = require('fs')
+
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
