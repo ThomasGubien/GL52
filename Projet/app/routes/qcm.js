@@ -20,9 +20,12 @@ router.post('/new', async (req, res)=>{
       )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const qcm=req.body
+    let qcm=req.body
+    if(typeof(qcm.question)==='string'){
+        qcm.question=[qcm.question]
+    }
     const questions=qcm.question.map((value,index)=>{
-        return {question:value,answers:qcm[`answer${index}`]}
+        return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null)}
     })
     const questionnaire={author:'5ca622b50a14fe182147ffdd',uv:'gl52',questions:questions,title:'test'}
     await collection.insertOne(questionnaire)
