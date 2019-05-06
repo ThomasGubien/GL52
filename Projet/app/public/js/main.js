@@ -46,7 +46,7 @@ function addAnswer(nbC) {
 
     div.innerHTML =
         `<input type="text" name="answer${nbC}" value="" />\
-        <label> <input type="checkbox" name="check${nbC}" value="${nbC}" /> Correct Answer? </label>`
+        <label> <input type="checkbox" name="check${nbC}" value=${nbC} /> Correct Answer? </label>`
 
     document.getElementsByClassName('question')[nbC].appendChild(div);
   }   
