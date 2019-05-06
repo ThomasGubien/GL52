@@ -9,6 +9,7 @@ var loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup')
 var usersRouter = require('./routes/users');
 const qcmRouter=require('./routes/qcm')
+const fileRouter=require('./routes/upload')
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use('/login', loginRouter);
 app.use('/signup',signupRouter)
 app.use('/users', usersRouter);
 app.use('/createQCM',qcmRouter)
+app.use('/file',fileRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -43,5 +45,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
