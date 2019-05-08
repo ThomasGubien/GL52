@@ -11,4 +11,16 @@ block content
         .page-title
           ol.breadcrumb.text-right
             li.active #{title}
-  
+  .col-md-6.offset-md-3
+    .card
+      .card-header
+        strong QCM List
+      .card-body.card-block
+        table.table
+          thead
+            tr
+              th(scope='col') #
+              th(scope='col') Title
+              th(scope='col') Author
+          tbody
+            tr(id='list')

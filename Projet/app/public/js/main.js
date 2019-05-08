@@ -64,4 +64,10 @@ function addAnswer(nbC) {
 
 	document.getElementById('qcm').appendChild(div);
 	nbclicks++
-  }  
+}  
+
+function addLineList(param) {
+    const td = document.createElement('td')
+    td.innerHTML = `${param}`
+    document.getElementById('list').appendChild(td);
+}

@@ -13,8 +13,30 @@ router.get('/createQCM',  (req, res, next) =>{
     })
 })
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
     console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    var arr = [];
+    collection.find({}, function (err, docs) {
+        docs.each(function (err, doc) {
+            if (doc) {
+                console.log(doc);
+                arr.push(doc);
+
+            } else {
+                res.end();
+            }
+        });
+    });
+    for (var i = 0; i < arr.length; i++) {
+        addLineList(arr[i].title)
+    }
+    console.log(arr)
     res.render('listQCM', {
         title: 'Questionnaires'
     })
