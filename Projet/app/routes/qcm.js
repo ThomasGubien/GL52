@@ -23,19 +23,11 @@ router.get('/', async (req, res, next) => {
     const collection = db.collection('questionnaires')
     var arr = [];
     collection.find({}, function (err, docs) {
-        docs.each(function (err, doc) {
-            if (doc) {
-                console.log(doc);
-                arr.push(doc);
-
-            } else {
-                res.end();
-            }
-        });
+        arr = docs
     });
-    for (var i = 0; i < arr.length; i++) {
-        addLineList(arr[i].title)
-    }
+    //for (var i = 0; i < arr.length; i++) {
+    //    addLineList(arr[i].title)
+    //}
     console.log(arr)
     res.render('listQCM', {
         title: 'Questionnaires'
