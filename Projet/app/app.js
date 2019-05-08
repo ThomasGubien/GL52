@@ -26,7 +26,7 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/signup',signupRouter)
 app.use('/users', usersRouter);
-app.use('/createQCM',qcmRouter)
+app.use('/qcm',qcmRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
