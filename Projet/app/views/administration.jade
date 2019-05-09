@@ -1,12 +1,35 @@
 extends layout
 
 block content
-  
-
-
-
-
-  .col-lg-6
+  .col-md-6
+    .card
+      .card-header
+        strong Users List
+      .card-body.card-block
+        table.table
+          thead
+            tr
+              th(scope='col') #
+              th(scope='col') UserName
+              th(scope='col') Author
+              th(scope='col') Modifier
+          tbody
+            tr(id='usersList')
+  .col-md-6
+    .card
+      .card-header
+        strong Groups List
+      .card-body.card-block
+        table.table
+          thead
+            tr
+              th(scope='col') #
+              th(scope='col') Nom Groupe
+              th(scope='col') Gestionnaire
+              th(scope='col') Modifier
+          tbody
+            tr(id='groupList')
+  .col-md-6
     .card
       .card-header
         strong Notifications
