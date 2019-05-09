@@ -14,11 +14,24 @@ router.get('/create',  (req, res, next) =>{
     })
 })
 
-router.get('/manage', (req, res, next) => {
+router.get('/manage', async (req, res, next) => {
     console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const arr = await collection.find().toArray()
+    const fullarr = arr.map((qcm, index) => {
+        return qcm
+    })
+    client.close()
+    console.log(fullarr)
     res.render('manageQuiz', {
         chemin: 'Quiz',
-        title: 'Manage'
+        title: 'Manage',
+        quiz: fullarr
     })
 })
 
