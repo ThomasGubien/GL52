@@ -21,14 +21,15 @@ router.get('/', async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    var arr = [];
-    collection.find({}, function (err, docs) {
-        arr = docs
-    });
-    //for (var i = 0; i < arr.length; i++) {
-    //    addLineList(arr[i].title)
-    //}
-    console.log(arr)
+    const arr = await collection.find().toArray()
+    const arrTitle = arr.map((qcm, index) => {
+        return qcm.title
+    })
+    client.close()
+    console.log(arrTitle)
+    for (var i = 0; i < arrTitle.length; i++) {
+        addLineList(arrTitle[i])
+    }
     res.render('listQCM', {
         title: 'Questionnaires'
     })
@@ -52,4 +53,5 @@ router.post('/new', async (req, res)=>{
     await collection.insertOne(questionnaire)
     client.close()
 })
+
 module.exports = router
