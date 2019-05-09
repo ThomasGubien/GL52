@@ -53,10 +53,10 @@ html
               ul.sub-menu.children.dropdown-menu
                 li
                   i.fa.fa-plus
-                  a(href='/createQCM') Creation
+                  a(href='/qcm/create') Creation
                 li
                   i.fa.fa-edit
-                  a(href='#') Modification
+                  a(href='/qcm/modify') Modification
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 i.menu-icon.fa.fa-certificate
@@ -85,6 +85,17 @@ html
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                i.menu-icon.fa.fa-cogs
+                | Settings
+              ul.sub-menu.children.dropdown-menu
+                li
+                  i.menu-icon.fa.fa-user
+                  a(href='/user') Profile
+                li
+                  i.menu-icon.fa.fa-terminal
+                  a(href='/Administration') Administration
+            li.menu-item-has-children.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 i.menu-icon.fa.fa-glass
                 | Pages
               ul.sub-menu.children.dropdown-menu
@@ -94,20 +105,6 @@ html
                 li
                   i.menu-icon.fa.fa-sign-in
                   a(href='/signup') Register
-                li
-                  i.menu-icon.fa.fa-paper-plane
-                  a(href='pages-forget.html') Forget Pass
-            li.menu-item-has-children.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-cogs
-                | Settings
-              ul.sub-menu.children.dropdown-menu
-                li
-                  i.menu-icon.fa.fa-sign-in
-                  a(href='/user') Profile
-                li
-                  i.menu-icon.fa.fa-sign-in
-                  a(href='/Administration') Administration
         // /.navbar-collapse
     // /#left-panel
     // Left Panel

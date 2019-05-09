@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .col-md-6.offset-md-3
+    .card
+      .card-header
+        strong files List
+      .card-body.card-block
+        table.table
+          thead
+            tr
+              th(scope='col') #
+              th(scope='col') Title
+              th(scope='col') Group
+              th(scope='col') Action
+          tbody
+            tr(id='usersList')

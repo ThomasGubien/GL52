@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  .col-md-6.offset-md-3
+  .col-md-6
     .card
       .card-header.user-header.alt.bg-dark
         .media
@@ -34,4 +34,17 @@ block content
                 label Password
                 input.form-control(type='password', placeholder='**********', name='email')
           button.btn.btn-primary.btn-flat.m-b-30.m-t-30(type='submit') Update
-      
+  .col-md-6
+    .card
+      .card-header
+        strong Group List
+      .card-body.card-block
+        table.table
+          thead
+            tr
+              th(scope='col') #
+              th(scope='col') NomGroupe
+              th(scope='col') Gestionnaire
+              th(scope='col') Desabonner
+          tbody
+            tr(id='usersList')

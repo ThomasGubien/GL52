@@ -6,11 +6,19 @@ const _ = require('lodash')
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
-router.get('/',  (req, res, next) =>{
+router.get('/create',  (req, res, next) =>{
     console.log('QCMID '+req.query.qcmID)
     res.render('createQCM', {
         chemin: 'QCM',
         title: 'Creation'
+    })
+})
+
+router.get('/modify', (req, res, next) => {
+    console.log('QCMID ' + req.query.qcmID)
+    res.render('modifyQCM', {
+        chemin: 'QCM',
+        title: 'Modification'
     })
 })
 
