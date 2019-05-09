@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  .col-md-6.offset-md-3
+    .card
+      .card-header.user-header.alt.bg-dark
+        .media
+          a(href='#')
+            img.align-self-center.rounded-circle.mr-3(style='width:85px; height:85px;', alt='', src='images/admin.jpg')
+          .media-body
+            h2.text-light.display-6 FirstName LastName
+            p Student
+      .login-form
+        form(action='update-profil.php', method='post')
+          ul.list-group.list-group-flush
+            li.list-group-item
+              .form-group
+                label First Name
+                input.form-control(type='text', placeholder="", name='firstn')
+            li.list-group-item
+              .form-group
+                label Last Name
+                input.form-control(type='text', placeholder="", name='lastn')
+            li.list-group-item
+              .form-group
+                label Login
+                input.form-control(type='text', placeholder="", name='login')
+            li.list-group-item
+              .form-group
+                label Email address
+                input.form-control(type='email', placeholder="", name='email')
+            li.list-group-item
+              .form-group
+                label Password
+                input.form-control(type='password', placeholder='**********', name='email')
+          button.btn.btn-primary.btn-flat.m-b-30.m-t-30(type='submit') Update
+      

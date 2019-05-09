@@ -9,7 +9,7 @@ const fileUpload = require('express-fileupload');
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup')
-var usersRouter = require('./routes/users');
+var userRouter = require('./routes/users');
 const qcmRouter=require('./routes/qcm')
 const fileRouter=require('./routes/upload')
 
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/signup',signupRouter)
-app.use('/users', usersRouter);
+app.use('/user', userRouter);
 app.use('/createQCM',qcmRouter)
 app.use('/file',fileRouter)
 

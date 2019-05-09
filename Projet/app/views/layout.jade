@@ -81,35 +81,6 @@ html
                 li
                   i.menu-icon.ti-themify-logo
                   a(href='font-themify.html') Download
-            li
-              a(href='widgets.html')
-                i.menu-icon.ti-email
-                | Widgets
-            li.menu-item-has-children.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-bar-chart
-                | Charts
-              ul.sub-menu.children.dropdown-menu
-                li
-                  i.menu-icon.fa.fa-line-chart
-                  a(href='charts-chartjs.html') Chart JS
-                li
-                  i.menu-icon.fa.fa-area-chart
-                  a(href='charts-flot.html') Flot Chart
-                li
-                  i.menu-icon.fa.fa-pie-chart
-                  a(href='charts-peity.html') Peity Chart
-            li.menu-item-has-children.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-area-chart
-                | Maps
-              ul.sub-menu.children.dropdown-menu
-                li
-                  i.menu-icon.fa.fa-map-o
-                  a(href='maps-gmap.html') Google Maps
-                li
-                  i.menu-icon.fa.fa-street-view
-                  a(href='maps-vector.html') Vector Maps
             h3.menu-title Extras
             // /.menu-title
             li.menu-item-has-children.dropdown
@@ -199,7 +170,7 @@ html
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 img.user-avatar.rounded-circle(src='images/admin.jpg', alt='User Avatar')
               .user-menu.dropdown-menu
-                a.nav-link(href='#')
+                a.nav-link(href='/user')
                   i.fa.fa-.user
                   | My Profile
                 a.nav-link(href='#')
@@ -226,5 +197,14 @@ html
                   i.flag-icon.flag-icon-it
       // /header
       // Header
-      
+      .breadcrumbs
+        .col-sm-4
+          .page-header.float-left
+            .page-title
+              h1 #{title}
+        .col-sm-8
+          .page-header.float-right
+            .page-title
+              ol.breadcrumb.text-right
+                li #{chemin} / #{title}
       block content
