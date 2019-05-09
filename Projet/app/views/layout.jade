@@ -48,18 +48,18 @@ html
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-laptop
+                i.menu-icon.fa.fa-list-ul
                 | QCM
               ul.sub-menu.children.dropdown-menu
                 li
-                  i.fa.fa-puzzle-piece
+                  i.fa.fa-plus
                   a(href='/createQCM') Creation
                 li
-                  i.fa.fa-id-badge
+                  i.fa.fa-edit
                   a(href='#') Modification
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-table
+                i.menu-icon.fa.fa-certificate
                 | Resultats
               ul.sub-menu.children.dropdown-menu
                 li
@@ -72,14 +72,14 @@ html
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-tasks
+                i.menu-icon.fa.fa-files-o
                 | Documents
               ul.sub-menu.children.dropdown-menu
                 li
-                  i.menu-icon.fa.fa-fort-awesome
+                  i.menu-icon.fa.fa-upload
                   a(href='/file') Upload
                 li
-                  i.menu-icon.ti-themify-logo
+                  i.menu-icon.fa.fa-download
                   a(href='font-themify.html') Download
             h3.menu-title Extras
             // /.menu-title
@@ -97,6 +97,17 @@ html
                 li
                   i.menu-icon.fa.fa-paper-plane
                   a(href='pages-forget.html') Forget Pass
+            li.menu-item-has-children.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                i.menu-icon.fa.fa-cogs
+                | Settings
+              ul.sub-menu.children.dropdown-menu
+                li
+                  i.menu-icon.fa.fa-sign-in
+                  a(href='/user') Profile
+                li
+                  i.menu-icon.fa.fa-sign-in
+                  a(href='/Administration') Administration
         // /.navbar-collapse
     // /#left-panel
     // Left Panel

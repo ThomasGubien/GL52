@@ -10,8 +10,9 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup')
 var userRouter = require('./routes/users');
-const qcmRouter=require('./routes/qcm')
-const fileRouter=require('./routes/upload')
+const qcmRouter = require('./routes/qcm')
+const fileRouter = require('./routes/upload')
+const administrationRouter = require('./routes/administration')
 
 var app = express();
 app.use(fileUpload())
@@ -30,7 +31,8 @@ app.use('/login', loginRouter);
 app.use('/signup',signupRouter)
 app.use('/user', userRouter);
 app.use('/createQCM',qcmRouter)
-app.use('/file',fileRouter)
+app.use('/file', fileRouter)
+app.use('/administration', administrationRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
