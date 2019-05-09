@@ -10,8 +10,8 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup')
 var userRouter = require('./routes/users');
-const qcmRouter = require('./routes/qcm')
-const fileRouter = require('./routes/file')
+const quizRouter = require('./routes/quiz')
+const fileRouter = require('./routes/files')
 const administrationRouter = require('./routes/administration')
 
 var app = express();
@@ -30,7 +30,7 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/signup',signupRouter)
 app.use('/user', userRouter);
-app.use('/qcm',qcmRouter)
+app.use('/quiz', quizRouter)
 app.use('/file', fileRouter)
 app.use('/administration', administrationRouter)
 

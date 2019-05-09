@@ -49,14 +49,17 @@ html
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 i.menu-icon.fa.fa-list-ul
-                | QCM
+                | Quiz
               ul.sub-menu.children.dropdown-menu
                 li
                   i.fa.fa-plus
-                  a(href='/qcm/create') Creation
+                  a(href='/quiz/create') Creation
                 li
                   i.fa.fa-edit
-                  a(href='/qcm/modify') Modification
+                  a(href='/quiz/manage') Manage
+                li
+                  i.fa.fa-book
+                  a(href='/quiz/answer') Answer
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 i.menu-icon.fa.fa-certificate
@@ -77,10 +80,10 @@ html
               ul.sub-menu.children.dropdown-menu
                 li
                   i.menu-icon.fa.fa-upload
-                  a(href='/file') Upload
+                  a(href='/file/upload') Upload
                 li
                   i.menu-icon.fa.fa-download
-                  a(href='font-themify.html') Download
+                  a(href='/file/download') Download
             h3.menu-title Extras
             // /.menu-title
             li.menu-item-has-children.dropdown

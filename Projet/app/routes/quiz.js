@@ -8,17 +8,25 @@ const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongo
 
 router.get('/create',  (req, res, next) =>{
     console.log('QCMID '+req.query.qcmID)
-    res.render('createQCM', {
-        chemin: 'QCM',
-        title: 'Creation'
+    res.render('createQuiz', {
+        chemin: 'Quiz',
+        title: 'Create'
     })
 })
 
-router.get('/modify', (req, res, next) => {
+router.get('/manage', (req, res, next) => {
     console.log('QCMID ' + req.query.qcmID)
-    res.render('modifyQCM', {
-        chemin: 'QCM',
-        title: 'Modification'
+    res.render('manageQuiz', {
+        chemin: 'Quiz',
+        title: 'Manage'
+    })
+})
+
+router.get('/answer', (req, res, next) => {
+    console.log('QCMID ' + req.query.qcmID)
+    res.render('answerQuiz', {
+        chemin: 'Quiz',
+        title: 'Answer'
     })
 })
 

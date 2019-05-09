@@ -10,13 +10,15 @@ const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongo
 
 router.get('/upload',  (req, res, next) =>{
     res.render('uploadFile', {
+        chemin: 'Files',
         title: 'Upload a file'
     })
 })
 
-router.get('/upload', (req, res, next) => {
+router.get('/download', (req, res, next) => {
     res.render('downloadFile', {
-        title: 'Upload a file'
+        chemin: 'Files',
+        title: 'Download a file'
     })
 })
 
