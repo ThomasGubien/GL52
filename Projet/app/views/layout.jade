@@ -35,9 +35,9 @@ html
           button.navbar-toggler(type='button', data-toggle='collapse', data-target='#main-menu', aria-controls='main-menu', aria-expanded='false', aria-label='Toggle navigation')
             i.fa.fa-bars
           a.navbar-brand(href='/')
-            img(src='images/logo.png', alt='Logo')
+            img(src='/images/logo.png', alt='Logo')
           a.navbar-brand.hidden(href='/')
-            img(src='images/logo2.png', alt='Logo')
+            img(src='/images/logo2.png', alt='Logo')
         #main-menu.main-menu.collapse.navbar-collapse
           ul.nav.navbar-nav
             li.active
@@ -48,18 +48,21 @@ html
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-laptop
-                | QCM
+                i.menu-icon.fa.fa-list-ul
+                | Quiz
               ul.sub-menu.children.dropdown-menu
                 li
-                  i.fa.fa-puzzle-piece
-                  a(href='/createQCM') Creation
+                  i.fa.fa-plus
+                  a(href='/quiz/create') Creation
                 li
-                  i.fa.fa-id-badge
-                  a(href='#') Modification
+                  i.fa.fa-edit
+                  a(href='/quiz/manage') Manage
+                li
+                  i.fa.fa-book
+                  a(href='/quiz/answer') Answer
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-table
+                i.menu-icon.fa.fa-certificate
                 | Resultats
               ul.sub-menu.children.dropdown-menu
                 li
@@ -72,46 +75,28 @@ html
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-tasks
+                i.menu-icon.fa.fa-files-o
                 | Documents
               ul.sub-menu.children.dropdown-menu
                 li
-                  i.menu-icon.fa.fa-fort-awesome
-                  a(href='/file') Upload
+                  i.menu-icon.fa.fa-upload
+                  a(href='/file/upload') Upload
                 li
-                  i.menu-icon.ti-themify-logo
-                  a(href='font-themify.html') Download
-            li
-              a(href='widgets.html')
-                i.menu-icon.ti-email
-                | Widgets
-            li.menu-item-has-children.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-bar-chart
-                | Charts
-              ul.sub-menu.children.dropdown-menu
-                li
-                  i.menu-icon.fa.fa-line-chart
-                  a(href='charts-chartjs.html') Chart JS
-                li
-                  i.menu-icon.fa.fa-area-chart
-                  a(href='charts-flot.html') Flot Chart
-                li
-                  i.menu-icon.fa.fa-pie-chart
-                  a(href='charts-peity.html') Peity Chart
-            li.menu-item-has-children.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-area-chart
-                | Maps
-              ul.sub-menu.children.dropdown-menu
-                li
-                  i.menu-icon.fa.fa-map-o
-                  a(href='maps-gmap.html') Google Maps
-                li
-                  i.menu-icon.fa.fa-street-view
-                  a(href='maps-vector.html') Vector Maps
+                  i.menu-icon.fa.fa-download
+                  a(href='/file/download') Download
             h3.menu-title Extras
             // /.menu-title
+            li.menu-item-has-children.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                i.menu-icon.fa.fa-cogs
+                | Settings
+              ul.sub-menu.children.dropdown-menu
+                li
+                  i.menu-icon.fa.fa-user
+                  a(href='/user') Profile
+                li
+                  i.menu-icon.fa.fa-terminal
+                  a(href='/Administration') Administration
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                 i.menu-icon.fa.fa-glass
@@ -123,9 +108,6 @@ html
                 li
                   i.menu-icon.fa.fa-sign-in
                   a(href='/signup') Register
-                li
-                  i.menu-icon.fa.fa-paper-plane
-                  a(href='pages-forget.html') Forget Pass
         // /.navbar-collapse
     // /#left-panel
     // Left Panel
@@ -168,28 +150,28 @@ html
                   p.red You have 4 Mails
                   a.dropdown-item.media.bg-flat-color-1(href='#')
                     span.photo.media-left
-                      img(alt='avatar', src='images/avatar/1.jpg')
+                      img(alt='avatar', src='/images/avatar/1.jpg')
                     span.message.media-body
                       span.name.float-left Jonathan Smith
                       span.time.float-right Just now
                       p Hello, this is an example msg
                   a.dropdown-item.media.bg-flat-color-4(href='#')
                     span.photo.media-left
-                      img(alt='avatar', src='images/avatar/2.jpg')
+                      img(alt='avatar', src='/images/avatar/2.jpg')
                     span.message.media-body
                       span.name.float-left Jack Sanders
                       span.time.float-right 5 minutes ago
                       p Lorem ipsum dolor sit amet, consectetur
                   a.dropdown-item.media.bg-flat-color-5(href='#')
                     span.photo.media-left
-                      img(alt='avatar', src='images/avatar/3.jpg')
+                      img(alt='avatar', src='/images/avatar/3.jpg')
                     span.message.media-body
                       span.name.float-left Cheryl Wheeler
                       span.time.float-right 10 minutes ago
                       p Hello, this is an example msg
                   a.dropdown-item.media.bg-flat-color-3(href='#')
                     span.photo.media-left
-                      img(alt='avatar', src='images/avatar/4.jpg')
+                      img(alt='avatar', src='/images/avatar/4.jpg')
                     span.message.media-body
                       span.name.float-left Rachel Santos
                       span.time.float-right 15 minutes ago
@@ -197,9 +179,9 @@ html
           .col-sm-5
             .user-area.dropdown.float-right
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                img.user-avatar.rounded-circle(src='images/admin.jpg', alt='User Avatar')
+                img.user-avatar.rounded-circle(src='/images/admin.jpg', alt='User Avatar')
               .user-menu.dropdown-menu
-                a.nav-link(href='#')
+                a.nav-link(href='/user')
                   i.fa.fa-.user
                   | My Profile
                 a.nav-link(href='#')
@@ -226,5 +208,14 @@ html
                   i.flag-icon.flag-icon-it
       // /header
       // Header
-      
+      .breadcrumbs
+        .col-sm-4
+          .page-header.float-left
+            .page-title
+              h1 #{title}
+        .col-sm-8
+          .page-header.float-right
+            .page-title
+              ol.breadcrumb.text-right
+                li #{chemin} / #{title}
       block content

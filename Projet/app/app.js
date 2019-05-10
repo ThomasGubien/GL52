@@ -9,9 +9,10 @@ const fileUpload = require('express-fileupload');
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup')
-var usersRouter = require('./routes/users');
-const qcmRouter=require('./routes/qcm')
-const fileRouter=require('./routes/upload')
+var userRouter = require('./routes/users');
+const quizRouter = require('./routes/quiz')
+const fileRouter = require('./routes/files')
+const administrationRouter = require('./routes/administration')
 
 var app = express();
 app.use(fileUpload())
@@ -28,9 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/signup',signupRouter)
-app.use('/users', usersRouter);
-app.use('/createQCM',qcmRouter)
-app.use('/file',fileRouter)
+app.use('/user', userRouter);
+app.use('/quiz', quizRouter)
+app.use('/file', fileRouter)
+app.use('/administration', administrationRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

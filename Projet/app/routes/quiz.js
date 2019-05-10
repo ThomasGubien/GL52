@@ -6,10 +6,40 @@ const _ = require('lodash')
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
-router.get('/',  (req, res, next) =>{
+router.get('/create',  (req, res, next) =>{
     console.log('QCMID '+req.query.qcmID)
-    res.render('createQCM', {
-        title: 'createQCM'
+    res.render('createQuiz', {
+        chemin: 'Quiz',
+        title: 'Create'
+    })
+})
+
+router.get('/manage', async (req, res, next) => {
+    console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const arr = await collection.find().toArray()
+    const fullarr = arr.map((qcm, index) => {
+        return qcm
+    })
+    client.close()
+    console.log(fullarr)
+    res.render('manageQuiz', {
+        chemin: 'Quiz',
+        title: 'Manage',
+        quiz: fullarr
+    })
+})
+
+router.get('/answer', (req, res, next) => {
+    console.log('QCMID ' + req.query.qcmID)
+    res.render('answerQuiz', {
+        chemin: 'Quiz',
+        title: 'Answer'
     })
 })
 
