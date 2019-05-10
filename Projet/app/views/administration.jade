@@ -11,11 +11,16 @@ block content
             thead
               tr
                 th(scope='col') #
-                th(scope='col') UserName
-                th(scope='col') Author
-                th(scope='col') Modifier
+                th(scope='col') First Name
+                th(scope='col') Name
+                th(scope='col') email
             tbody
-              tr(id='usersList')
+              for u in users
+                tr(id='usersList')
+                  td.t(style='width:20%')= u._id
+                  td= u.firstName
+                  td= u.name
+                  td= u.email
   .col-md-6
     .card
       .card-header
