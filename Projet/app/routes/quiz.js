@@ -35,11 +35,24 @@ router.get('/manage', async (req, res, next) => {
     })
 })
 
-router.get('/answer', (req, res, next) => {
+router.get('/answer', async (req, res, next) => {
     console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const arr = await collection.find().toArray()
+    const quizarr = arr.map((qcm, index) => {
+        return qcm
+    })
+    client.close()
+    console.log(quizarr)
     res.render('answerQuiz', {
         chemin: 'Quiz',
-        title: 'Answer'
+        title: 'Answer',
+        quiz: quizarr
     })
 })
 

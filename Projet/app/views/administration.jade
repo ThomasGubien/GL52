@@ -6,61 +6,63 @@ block content
       .card-header
         strong Users List
       .card-body.card-block
-        table.table
-          thead
-            tr
-              th(scope='col') #
-              th(scope='col') UserName
-              th(scope='col') Author
-              th(scope='col') Modifier
-          tbody
-            tr(id='usersList')
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') #
+                th(scope='col') UserName
+                th(scope='col') Author
+                th(scope='col') Modifier
+            tbody
+              tr(id='usersList')
   .col-md-6
     .card
       .card-header
         strong Groups List
       .card-body.card-block
-        table.table
-          thead
-            tr
-              th(scope='col') #
-              th(scope='col') Nom Groupe
-              th(scope='col') Gestionnaire
-              th(scope='col') Actions
-          tbody
-            tr(id='groupList')
-            tr
-              td.t(style='width:10%')
-                input.form-control(type='text', name='lib', placeholder='1', size='3' disabled)
-              td
-                input.form-control(type='text', name='lib', placeholder='NomGroupe')
-              td
-                input.form-control(type='text', name='lib', placeholder='Moi')
-              td.t(style='width:20%')
-                button.btn.btn-success.btn-sm(type='submit')
-                  i.fa.fa-check
-                button.btn.btn-danger.btn-sm(type='reset')
-                  i.fa.fa-times
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') #
+                th(scope='col') Nom Groupe
+                th(scope='col') Gestionnaire
+                th(scope='col') Actions
+            tbody
+              tr(id='groupList')
+              tr
+                td.t(style='width:10%')
+                  input.form-control(type='text', name='lib', placeholder='1', size='3' disabled)
+                td
+                  input.form-control(type='text', name='lib', placeholder='NomGroupe')
+                td
+                  input.form-control(type='text', name='lib', placeholder='Moi')
+                td.t(style='width:20%')
+                  button.btn.btn-success.btn-sm(type='submit')
+                    i.fa.fa-check
+                  button.btn.btn-danger.btn-sm(type='reset')
+                    i.fa.fa-times
   .col-md-6
     .card
-      .card-header
-        strong Notifications
-      form.form-horizontal(action='', method='post')
-        .card-body.card-block
-          .row.form-group
-            .col.col-md-12
-              .input-group
-                select#select.form-control.col-md-3(name='select')
-                  option(value='0') Info
-                  option(value='1') Check
-                  option(value='2') Warning
-                  option(value='3') Error
-                input.form-control(type='text', name='lib', placeholder='Text')
-        .card-footer
-          button.btn.btn-success.btn-sm(type='submit')
-            i.fa.fa-check
-            |  Submit
-          button.btn.btn-danger.btn-sm(type='reset')
-            i.fa.fa-times
-            |  Reset
-  
+      .text-center
+        .card-header
+          strong Notifications
+        form.form-horizontal(action='', method='post')
+          .card-body.card-block
+            .row.form-group
+              .col.col-md-12
+                .input-group
+                  select#select.form-control.col-md-3(name='select')
+                    option(value='0') Info
+                    option(value='1') Check
+                    option(value='2') Warning
+                    option(value='3') Error
+                  input.form-control(type='text', name='lib', placeholder='Text')
+          .card-footer
+            button.btn.btn-success.btn-sm(type='submit')
+              i.fa.fa-check
+              |  Submit
+            button.btn.btn-danger.btn-sm(type='reset')
+              i.fa.fa-times
+              |  Reset

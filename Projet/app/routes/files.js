@@ -15,10 +15,23 @@ router.get('/upload',  (req, res, next) =>{
     })
 })
 
-router.get('/download', (req, res, next) => {
+router.get('/download', async (req, res, next) => {
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('files')
+    const arr = await collection.find().toArray()
+    const filesarr = arr.map((qcm, index) => {
+        return qcm
+    })
+    client.close()
+    console.log(filesarr)
     res.render('downloadFile', {
         chemin: 'Files',
-        title: 'Download a file'
+        title: 'Download',
+        files: filesarr
     })
 })
 
