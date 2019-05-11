@@ -10,15 +10,18 @@ block content
           table.table
             thead
               tr
-                th(scope='col') #
                 th(scope='col') Title
+                th(scope='col') filename
+                th(scope='col') Groups
                 th(scope='col') Action
               tbody
                 for f in files
                   tr
-                    td.t(style='width:20%')= f._id
-                    td= f.name
-                    td.t(style='width:30%')
-                      button.btn.btn-primary.btn-sm(type='Download').t(style='width:100%')
+                    td.t(style='width:20%')= f.name
+                    td= f.filename
+                    td
+                      for g in f.groups
+                        a #{g}
+                    td.t(style='width:20%')
+                      button.btn.btn-primary.btn-sm.btn-block(type='Download').t(style='width:100%')
                         i.fa.fa-download
-                        a Download

@@ -13,7 +13,8 @@ block content
             for g in groups
               option(value='#{g.name}')= g.name
           br
-        input(type="button", value="Add Question",onclick="addQuestion()")
+        button.btn.btn-lg.btn-info(onclick="addQuestion()") Add Question 
+          i.fa.fa-plus
         br 
         br
-        button.btn.btn-lg.btn-info.btn-block(type='submit', form='qcm') Submit
+        button.btn.btn-lg.btn-success.btn-block(type='submit', form='qcm') Submit

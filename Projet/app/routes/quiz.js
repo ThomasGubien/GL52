@@ -87,4 +87,6 @@ router.post('/new', async (req, res)=>{
     client.close()
     res.redirect('/quiz/manage')
 })
+
+
 module.exports = router

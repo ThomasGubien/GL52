@@ -55,26 +55,3 @@ block content
                       i.fa.fa-check
                     button.btn.btn-danger.btn-sm(type='reset', form='groupform')
                       i.fa.fa-times
-  .col-md-6
-    .card
-      .text-center
-        .card-header
-          strong Notifications
-        form.form-horizontal(action='', method='post')
-          .card-body.card-block
-            .row.form-group
-              .col.col-md-12
-                .input-group
-                  select#select.form-control.col-md-3(name='select')
-                    option(value='0') Info
-                    option(value='1') Check
-                    option(value='2') Warning
-                    option(value='3') Error
-                  input.form-control(type='text', name='lib', placeholder='Text')
-          .card-footer
-            button.btn.btn-success.btn-sm(type='submit')
-              i.fa.fa-check
-              |  Submit
-            button.btn.btn-danger.btn-sm(type='reset')
-              i.fa.fa-times
-              |  Reset
