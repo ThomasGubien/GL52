@@ -6,11 +6,23 @@ const _ = require('lodash')
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
-router.get('/create',  (req, res, next) =>{
-    console.log('QCMID '+req.query.qcmID)
+router.get('/create', async  (req, res, next) =>{
+    console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection2 = db.collection('groups')
+    const arr2 = await collection2.find().toArray()
+    const grpsarr = arr2.map((qcm, index) => {
+        return qcm
+    })
+    client.close()
     res.render('createQuiz', {
         chemin: 'Quiz',
-        title: 'Create'
+        title: 'Create',
+        groups: grpsarr
     })
 })
 
@@ -70,8 +82,9 @@ router.post('/new', async (req, res)=>{
     const questions=qcm.question.map((value,index)=>{
         return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null)}
     })
-    const questionnaire={author:'5ca622b50a14fe182147ffdd',uv:'gl52',questions:questions,title:'test'}
+    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
     await collection.insertOne(questionnaire)
     client.close()
+    res.redirect('/quiz/manage')
 })
 module.exports = router

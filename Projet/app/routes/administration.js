@@ -20,14 +20,35 @@ router.get('/', async (req, res, next) => {
     const usersarr = arr.map((qcm, index) => {
         return qcm
     })
+    const collection2 = db.collection('groups')
+    const arr2 = await collection2.find().toArray()
+    const grpsarr = arr2.map((qcm, index) => {
+        return qcm
+    })
     client.close()
-    console.log(usersarr)
+    //console.log(usersarr)
     res.render('administration', {
         chemin: 'Settings',
         title: 'Administration',
-        users: usersarr
+        users: usersarr,
+        groups: grpsarr
     });
 });
 
+router.post('/new', async (req, res) => {
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('groups')
+    let grp = req.body
+    //console.log(grp)
+    const groupe = { name: grp.nomgrp, gestionnaire: grp.gestionnairegrp, users: grp.usersgrp }
+    await collection.insertOne(groupe)
+    //console.log(groupe)
+    client.close()
+    res.redirect('/administration')
+})
 
 module.exports = router;

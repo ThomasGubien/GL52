@@ -6,8 +6,14 @@ block content
       .card-header
         strong New QCM
       .card-body.card-block
+        form(action='/quiz/new', method='POST',id='qcm')
+          input.form-control(type='text', name='nomqcm', placeholder='Nom Questionnaire')
+          br
+          select.form-control(name='usersgrp', multiple='multiple')
+            for g in groups
+              option(value='#{g.name}')= g.name
+          br
         input(type="button", value="Add Question",onclick="addQuestion()")
         br 
         br
-        form(action='/createQCM/new', method='POST',id='qcm')
         button.btn.btn-lg.btn-info.btn-block(type='submit', form='qcm') Submit
