@@ -42,9 +42,14 @@ block content
         table.table
           thead
             tr
-              th(scope='col') #
               th(scope='col') NomGroupe
               th(scope='col') Gestionnaire
               th(scope='col') Desabonner
           tbody
-            tr(id='usersList')
+            for g in groups
+              tr(id='groupList')
+                td= g.name
+                td= g.gestionnaire
+                td
+                  button.btn.btn-danger.btn-sm(type='desabonner')
+                    i.fa.fa-ban

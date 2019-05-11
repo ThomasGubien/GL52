@@ -17,15 +17,18 @@ router.get('/', async (req, res, next) => {
     const db = client.db('gl52')
     const collection = db.collection('users')
     const userinfo = await collection.findOne({name:'GUBIEN'})
-    /*const userinfo = arr.map((qcm, index) => {
+    const collection2 = db.collection('groups')
+    const arr2 = await collection2.find({users: 'GUBIEN'}).toArray()
+    const grpsarr = arr2.map((qcm, index) => {
         return qcm
-    })*/
+    })
     client.close()
-    console.log(userinfo)
+    //console.log(grpsarr)
     res.render('userProfile', {
         chemin: 'Settings',
         title: 'Profil',
-        profil: userinfo
+        profil: userinfo,
+        groups: grpsarr
     });
 });
 
