@@ -4,12 +4,14 @@ block content
   .col-md-8.offset-md-2
     .card
       .card-header
-        strong New QCM
+        strong New Quiz
       .card-body.card-block
         form(action='/quiz/new', method='POST',id='qcm')
-          input.form-control(type='text', name='nomqcm', placeholder='Nom Questionnaire')
+          label Quiz Name
+          input.form-control(type='text', name='nomqcm', placeholder='Name')
           br
-          select.form-control(name='usersgrp', multiple='multiple')
+          label Authorized groups
+          select.form-control(name='usersgrp', multiple='multiple') 
             for g in groups
               option(value='#{g.name}')= g.name
           br

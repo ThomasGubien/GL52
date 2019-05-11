@@ -12,7 +12,7 @@ block content
               tr
                 th(scope='col') First Name
                 th(scope='col') Name
-                th(scope='col') email
+                th(scope='col') Email
             tbody
               for u in users
                 tr(id='usersList')
@@ -28,8 +28,8 @@ block content
           table.table
             thead
               tr
-                th(scope='col') Nom Groupe
-                th(scope='col') Gestionnaire
+                th(scope='col') Group Name
+                th(scope='col') Group Manager
                 th(scope='col') Users
                 th(scope='col') Actions
             tbody
@@ -38,20 +38,24 @@ block content
                   td= g.name
                   td= g.gestionnaire
                   td
+                  td
                     button.btn.btn-danger.btn-sm(type='take')
                       i.fa.fa-trash
               tr
                 form(action='/administration/new', method='POST',id='groupform')
                   td
-                    input.form-control(type='text', name='nomgrp', placeholder='NomGroupe')
+                    input.form-control(type='text', name='nomgrp', placeholder='Name')
                   td
-                    input.form-control(type='text', name='gestionnairegrp', placeholder='Moi')
+                    select.form-control(name='gestionnairegrp')
+                      option(value="") Manager Name
+                      for u in users
+                        option(value='#{u.name}')= u.name
                   td
                     select.form-control(name='usersgrp', multiple='multiple')
                       for u in users
                         option(value='#{u.name}')= u.name
                   td.t(style='width:20%')
-                    button.btn.btn-success.btn-sm(type='submit', form='groupform')
+                    button.btn.btn-success.btn-sm(type='submit', form='groupform').t(style="margin-right:5px")
                       i.fa.fa-check
                     button.btn.btn-danger.btn-sm(type='reset', form='groupform')
                       i.fa.fa-times

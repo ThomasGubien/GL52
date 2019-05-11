@@ -4,20 +4,18 @@ block content
   .col-md-8.offset-md-2
     .card
       .card-header
-        strong QCM List
+        strong Quiz List
       .card-body.card-block
         .text-center
           table.table
             thead
               tr
-                th(scope='col') #
                 th(scope='col') Title
                 th(scope='col') Groups
                 th(scope='col') Action
             tbody
               for q in quiz
                 tr
-                  td.t(style='width:20%')= q._id
                   td= q.title
                   td
                     for g in q.groups

@@ -60,7 +60,7 @@ function addAnswer(nbC) {
     div.innerHTML =
 		`<label> Question </label>\
 		<input type="text" name="question" value="" />\
-		<input type="button" value="Add Answer" onclick="addAnswer(${nbclicks})">`
+		<input type="button" class="button btn btn-sm btn-info" value="Add Answer" onclick="addAnswer(${nbclicks})">`
 
 	document.getElementById('qcm').appendChild(div);
 	nbclicks++
