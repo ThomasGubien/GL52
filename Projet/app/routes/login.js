@@ -24,7 +24,8 @@ router.post('/log',async function (req, res) {
     console.log(user)
     console.log(user.password)
     console.log(infos.pwd)
-    if(user.password==infos.pwd){
+    if (user.password == infos.pwd) {
+        req.session.user = user
         res.redirect('/')
     }
     else{
@@ -33,17 +34,6 @@ router.post('/log',async function (req, res) {
             'success':'Wrong Credentials'
         })
     }
-    /*
-    connection.query('Select * from users where UserMail = ?', infos.email, function (err, rows) {
-        console.log(rows[0].UserPassword);
-        //var password = rows[0].UserPassword;
-        console.log(infos);
-        if (rows[0].UserPassword == infos.pwd) {
-            connection.end();
-            res.redirect('/');
-        }
-    });
-*/
 });
 
 module.exports = router;
