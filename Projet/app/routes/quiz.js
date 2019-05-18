@@ -68,6 +68,40 @@ router.get('/answer', async (req, res, next) => {
     })
 })
 
+router.get('/startQuiz/:quiz_id', async (req, res, next) => {
+    console.log('QCMID ' + req.params.quiz_id)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const q = await collection.findOne({ title: req.params.quiz_id })
+   
+    client.close()
+    console.log(q)
+    res.render('quiz', {
+        chemin: 'Quiz',
+        title: 'Answer',
+        quiz: q,
+        questions: q.questions
+    })
+})
+
+router.post('/newAnswers/:quiz_id', async (req, res) => {
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('answers')
+    const answers = { author: '5ca622b50a14fe182147ffdd', title: req.params.quiz_id, answers: req.body }
+    await collection.insertOne(answers)
+    client.close()
+    console.log(req.body)
+    res.redirect('/quiz/answer')
+})
+
 router.post('/new', async (req, res)=>{
     const client = await MongoClient.connect(
         URL,
