@@ -8,7 +8,7 @@ block content
           a(href='#')
             img.align-self-center.rounded-circle.mr-3(style='width:85px; height:85px;', alt='', src='images/admin.jpg')
           .media-body
-            h2.text-light.display-6 FirstName LastName
+            h2.text-light.display-6 #{profil.firstName} #{profil.name}
             p Student
       .login-form
         form(action='update-profil.php', method='post')
@@ -16,19 +16,19 @@ block content
             li.list-group-item
               .form-group
                 label First Name
-                input.form-control(type='text', placeholder="", name='firstn')
+                input.form-control(type='text', placeholder="#{profil.firstName}", name='firstn')
             li.list-group-item
               .form-group
                 label Last Name
-                input.form-control(type='text', placeholder="", name='lastn')
-            li.list-group-item
-              .form-group
-                label Login
-                input.form-control(type='text', placeholder="", name='login')
+                input.form-control(type='text', placeholder="#{profil.name}", name='lastn')
+            //li.list-group-item
+            //  .form-group
+            //    label Login
+            //    input.form-control(type='text', placeholder="", name='login')
             li.list-group-item
               .form-group
                 label Email address
-                input.form-control(type='email', placeholder="", name='email')
+                input.form-control(type='email', placeholder="#{profil.email}", name='email')
             li.list-group-item
               .form-group
                 label Password
@@ -38,13 +38,18 @@ block content
     .card
       .card-header
         strong Group List
-      .card-body.card-block
+      .card-body.card-block.text-center
         table.table
           thead
             tr
-              th(scope='col') #
-              th(scope='col') NomGroupe
-              th(scope='col') Gestionnaire
-              th(scope='col') Desabonner
+              th(scope='col') Group Name
+              th(scope='col') Group Manager
+              th(scope='col') Unsubscribe
           tbody
-            tr(id='usersList')
+            for g in groups
+              tr(id='groupList')
+                td= g.name
+                td= g.gestionnaire
+                td
+                  button.btn.btn-danger.btn-sm(type='desabonner')
+                    i.fa.fa-ban
