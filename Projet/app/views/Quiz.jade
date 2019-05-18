@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  .col-md-10.offset-md-1
+    form(action='/quiz/newAnswers/#{quiz.title}', method='POST')
+      .card
+        .card-header
+          strong Quiz: #{quiz.title}
+        .card-body.card-block
+          for q in questions
+            .col-md-12
+              label
+                strong Question: #{q.question}
+              .card
+                .card-body.card-block
+                  .text-center
+                    table.table
+                      tbody
+                        for a in q.answers
+                          tr
+                            td #{a}
+                            td 
+                              input(type='checkbox', name='#{q.question}', value='#{a}')
+        .card-footer
+          .text-center
+            button.btn.btn-lg.btn-info.btn-block(type='submit') Submit

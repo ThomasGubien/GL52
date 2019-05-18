@@ -22,8 +22,9 @@ block content
                       a #{g} 
                   td.t(style='width:20%')
                     if q.title == 'test'
-                      button.btn.btn-primary.btn-sm(type='take').t(style='width:100%')
-                        a Take Exam
+                      form(action='/quiz/startQuiz/#{q.title}')
+                        button.btn.btn-primary.btn-sm(type='submit').t(style='width:100%')
+                          a Take Exam
                     else
                       button.btn.btn-secondary.btn-sm(type='result').t(style='width:100%')
                         a View result
