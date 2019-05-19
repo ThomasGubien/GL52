@@ -1,5 +1,7 @@
 extends layout
 
+script(src="routes/assignGroup.js")
+
 block content
   .col-md-6
     .card
@@ -17,15 +19,17 @@ block content
             for group in affectedGroups
               tr
                 td= group._id
-                td= group.title
-                td= group.uv
+                td= group.name
+                td= group.gestionnaire
                 td.t(style='width:20%')
-                  button.btn.btn-warning.btn-sm(type='modify')
-                    i.fa.fa-pencil
-                  button.btn.btn-danger.btn-sm(type='delete')
-                    i.fa.fa-trash
-                  button.btn.btn-dark.btn-sm(type='close')
-                    i.fa.fa-ban
+                  form(action='/assignGroup/delinkGroup?groupId='+group._id, method='POST')
+                    button.btn.btn-warning.btn-sm(type='modify')
+                      i.fa.fa-pencil
+                    button.btn.btn-danger.btn-sm(type='delete')
+                      i.fa.fa-trash
+                    button.btn.btn-dark.btn-sm(type='close')
+                      i.fa.fa-ban
+                    button(type='submit') Deassigner un groupe
   .col-md-6
     .card
       .card-header
@@ -42,12 +46,14 @@ block content
             for group in availableGroups
               tr
                 td= group._id
-                td= group.title
-                td= group.uv
+                td= group.name
+                td= group.gestionnaire
                 td.t(style='width:20%')
-                  button.btn.btn-warning.btn-sm(type='modify')
-                    i.fa.fa-pencil
-                  button.btn.btn-danger.btn-sm(type='delete')
-                    i.fa.fa-trash
-                  button.btn.btn-dark.btn-sm(type='close')
-                    i.fa.fa-ban
+                  form(action='/assignGroup/linkGroup?groupId='+group._id, method='POST')
+                    button.btn.btn-warning.btn-sm(type='modify')
+                      i.fa.fa-pencil
+                    button.btn.btn-danger.btn-sm(type='delete')
+                      i.fa.fa-trash
+                    button.btn.btn-dark.btn-sm(type='close')
+                      i.fa.fa-ban 
+                    button(type='submit') Assigner un groupe

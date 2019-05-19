@@ -27,7 +27,7 @@ router.get('/manage', async (req, res, next) => {
         return qcm
     })
     client.close()
-    console.log(fullarr)
+    //console.log(fullarr)
     res.render('manageQuiz', {
         chemin: 'Quiz',
         title: 'Manage',
