@@ -1,13 +1,22 @@
 extends layout
 
 block content
-  .col-md-6.offset-md-3
+  .col-md-8.offset-md-2
     .card
       .card-header
-        strong New QCM
+        strong New Quiz
       .card-body.card-block
-        input(type="button", value="Add Question",onclick="addQuestion()")
+        form(action='/quiz/new', method='POST',id='qcm')
+          label Quiz Name
+          input.form-control(type='text', name='nomqcm', placeholder='Name')
+          br
+          label Authorized groups
+          select.form-control(name='usersgrp', multiple='multiple') 
+            for g in groups
+              option(value='#{g.name}')= g.name
+          br
+        button.btn.btn-lg.btn-info(onclick="addQuestion()") Add Question 
+          i.fa.fa-plus
         br 
         br
-        form(action='/createQCM/new', method='POST',id='qcm')
-        button.btn.btn-lg.btn-info.btn-block(type='submit', form='qcm') Submit
+        button.btn.btn-lg.btn-success.btn-block(type='submit', form='qcm') Submit

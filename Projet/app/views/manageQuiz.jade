@@ -1,29 +1,29 @@
 extends layout
 
 block content
-  .col-md-6.offset-md-3
+  .col-md-8.offset-md-2
     .card
       .card-header
-        strong Quiz List
+        strong Manageable Quiz
       .card-body.card-block
-        table.table
-          thead
-            tr
-              th(scope='col') #
-              th(scope='col') Title
-              th(scope='col') Group
-              th(scope='col') Action
-          tbody
-            for q in quiz
+        .text-center
+          table.table
+            thead
               tr
-                td= q._id
-                td= q.title
-                td= q.uv
-                td.t(style='width:20%')
-                  button.btn.btn-warning.btn-sm(type='modify')
-                    i.fa.fa-pencil
-                  button.btn.btn-danger.btn-sm(type='delete')
-                    i.fa.fa-trash
-                  button.btn.btn-dark.btn-sm(type='close')
-                    i.fa.fa-ban
-                  a(href='/assignGroup?quizId='+q._id) Gestion des groupes
+                th(scope='col') Title
+                th(scope='col') Groups
+                th(scope='col') Action
+            tbody
+              for q in quiz
+                tr
+                  td= q.title
+                  for g in q.groups                      
+                    td= g.name
+                  td.t(style='width:20%')
+                    button.btn.btn-warning.btn-sm(type='modify')
+                      i.fa.fa-pencil
+                    button.btn.btn-danger.btn-sm(type='delete')
+                      i.fa.fa-trash
+                    button.btn.btn-dark.btn-sm(type='close')
+                      i.fa.fa-ban
+                    a(href='/assignGroup?quizId='+q._id) Gestion des groupes

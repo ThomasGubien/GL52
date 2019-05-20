@@ -6,7 +6,7 @@ block content
   .col-md-6
     .card
       .card-header
-        strong Groupes affecté au questionnaire
+        strong Groupes affectées au questionnaire
       .card-body.card-block
         table.table
           thead
@@ -16,7 +16,7 @@ block content
               th(scope='col') Gestionnaire
               th(scope='col') Actions
           tbody
-            for group in affectedGroups
+            for group in quiz.groups
               tr
                 td= group._id
                 td= group.name
@@ -29,7 +29,7 @@ block content
                       i.fa.fa-trash
                     button.btn.btn-dark.btn-sm(type='close')
                       i.fa.fa-ban
-                    button(type='submit') Deassigner un groupe
+                    button(type='submit') Desassigner un groupe
   .col-md-6
     .card
       .card-header

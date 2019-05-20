@@ -1,13 +1,20 @@
 extends layout
 
 block content
-  .col-md-6.offset-md-3
+  .col-md-8.offset-md-2
     .card
       .card-header
-        strong New File
+        strong Upload New File
       .card-body.card-block
-        br 
-        br
-        form(action='/file/new', method='POST',enctype= 'multipart/form-data',id='fileUp' )
-          input(type="file",id="avatar" ,name="myFile")
-          input(type='submit') 
+        .text-center
+          form(action='/file/new', method='POST', enctype='multipart/form-data', id='fileUp')
+            input.form-control(type='text', name='title', placeholder='Title')
+            br
+            select.form-control(name='grp', multiple='multiple')
+              for g in groups
+                option(value='#{g.name}')= g.name
+            br
+            input(type="file", id="avatar", name="myFile")
+            br
+            br
+        button.btn.btn-success.btn-lg.btn-block(type='submit', form='fileUp') Upload

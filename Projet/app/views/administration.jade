@@ -6,61 +6,56 @@ block content
       .card-header
         strong Users List
       .card-body.card-block
-        table.table
-          thead
-            tr
-              th(scope='col') #
-              th(scope='col') UserName
-              th(scope='col') Author
-              th(scope='col') Modifier
-          tbody
-            tr(id='usersList')
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') First Name
+                th(scope='col') Name
+                th(scope='col') Email
+            tbody
+              for u in users
+                tr(id='usersList')
+                  td= u.firstName
+                  td= u.name
+                  td= u.email
   .col-md-6
     .card
       .card-header
         strong Groups List
       .card-body.card-block
-        table.table
-          thead
-            tr
-              th(scope='col') #
-              th(scope='col') Nom Groupe
-              th(scope='col') Gestionnaire
-              th(scope='col') Actions
-          tbody
-            tr(id='groupList')
-            tr
-              td.t(style='width:10%')
-                input.form-control(type='text', name='lib', placeholder='1', size='3' disabled)
-              td
-                input.form-control(type='text', name='lib', placeholder='NomGroupe')
-              td
-                input.form-control(type='text', name='lib', placeholder='Moi')
-              td.t(style='width:20%')
-                button.btn.btn-success.btn-sm(type='submit')
-                  i.fa.fa-check
-                button.btn.btn-danger.btn-sm(type='reset')
-                  i.fa.fa-times
-  .col-md-6
-    .card
-      .card-header
-        strong Notifications
-      form.form-horizontal(action='', method='post')
-        .card-body.card-block
-          .row.form-group
-            .col.col-md-12
-              .input-group
-                select#select.form-control.col-md-3(name='select')
-                  option(value='0') Info
-                  option(value='1') Check
-                  option(value='2') Warning
-                  option(value='3') Error
-                input.form-control(type='text', name='lib', placeholder='Text')
-        .card-footer
-          button.btn.btn-success.btn-sm(type='submit')
-            i.fa.fa-check
-            |  Submit
-          button.btn.btn-danger.btn-sm(type='reset')
-            i.fa.fa-times
-            |  Reset
-  
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') Group Name
+                th(scope='col') Group Manager
+                th(scope='col') Users
+                th(scope='col') Actions
+            tbody
+              for g in groups
+                tr(id='groupList')
+                  td= g.name
+                  td= g.gestionnaire
+                  td
+                  td
+                    button.btn.btn-danger.btn-sm(type='take')
+                      i.fa.fa-trash
+              tr
+                form(action='/administration/new', method='POST',id='groupform')
+                  td
+                    input.form-control(type='text', name='nomgrp', placeholder='Name')
+                  td
+                    select.form-control(name='gestionnairegrp')
+                      option(value="") Manager Name
+                      for u in users
+                        option(value='#{u.name}')= u.name
+                  td
+                    select.form-control(name='usersgrp', multiple='multiple')
+                      for u in users
+                        option(value='#{u.name}')= u.name
+                  td.t(style='width:20%')
+                    button.btn.btn-success.btn-sm(type='submit', form='groupform').t(style="margin-right:5px")
+                      i.fa.fa-check
+                    button.btn.btn-danger.btn-sm(type='reset', form='groupform')
+                      i.fa.fa-times

@@ -16,27 +16,37 @@ router.get('/', async (req, res, next) =>{
         { useNewUrlParser: true }
     )
     const db = client.db('gl52')
+
+    //Select id_group from questionnaire
+    //Where id_questionnaire = id;    
+    quid = req.query.quizId;
+
+    const qcmCollection = db.collection('questionnaires')
+
+    const qcm = await qcmCollection.findOne({_id: ObjectId(quid)})
+
+    console.log(qcm)
+    var groupsID = new Array();
+    qcm.groups.forEach(element => {
+        groupsID.push(ObjectId(element._id))    
+    });
+    console.log(groupsID)
+
+    //Get available groups
     const collection = db.collection('groups')
-    const queryResult = await collection.find().toArray()
-    const availableResultSet = queryResult.map((availGroup, _id) => {
+    const availableGroups = await collection.find({_id: {"$nin": groupsID}}).toArray()
+    const availableResultSet = availableGroups.map((availGroup, _id) => {
         return availGroup
     })
 
     console.log(availableResultSet)
 
-    quid = req.query.quizId;
-    const affectedCollection = db.collection('questionnaires')
-
-    //Select id_group from questionnaire
-    //Where id_questionnaire = id;
-    const affectedqueryResult = await affectedCollection.find({_id: ObjectId(quid)}).limit(1).project({_id:0, author:0, questions: 0, title: 0}).toArray()
-    const affectedResultSet = affectedqueryResult[0]
-    console.log(affectedResultSet)
+    
     client.close()
 
     res.render('assignGroup', {
         title: 'Gestion des Groupes',
-        affectedGroups: affectedqueryResult,
+        quiz: qcm,
         availableGroups: availableResultSet
     })
 })
@@ -61,8 +71,9 @@ router.post('/linkGroup', async (req, res) => {
         
         qcmCollection.updateOne({_id: ObjectId(quid)}, {$push:{groups: groupDocument}})
 
-        const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
-        console.log(debugQcmDocument)
+        //Debug
+        //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
+        //console.log(debugQcmDocument)
         res.redirect('/assignGroup?quizId='+quid)
     }
 })
@@ -79,7 +90,7 @@ router.post('/delinkGroup', async (req, res) => {
         const db = client.db('gl52')        
         const collection = db.collection('groups')
 
-        const groupDocument = await collection.find({_id: ObjectId(req.query.groupId)}).toArray()
+        const groupDocument = await collection.findOne({_id: ObjectId(req.query.groupId)})
         
         console.log(groupDocument)
 
@@ -87,8 +98,9 @@ router.post('/delinkGroup', async (req, res) => {
         
         qcmCollection.updateOne({_id: ObjectId(quid)}, {$pull:{groups: groupDocument}})
 
-        const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
-        console.log(debugQcmDocument)
+        //Debug
+        //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
+        //console.log(debugQcmDocument)
         res.redirect('/assignGroup?quizId='+quid)
     }
 })
