@@ -17,8 +17,6 @@ router.get('/', async (req, res, next) =>{
     )
     const db = client.db('gl52')
 
-    //Select id_group from questionnaire
-    //Where id_questionnaire = id;    
     quid = req.query.quizId;
 
     const qcmCollection = db.collection('questionnaires')
@@ -26,11 +24,12 @@ router.get('/', async (req, res, next) =>{
     const qcm = await qcmCollection.findOne({_id: ObjectId(quid)})
 
     console.log(qcm)
-    var groupsID = new Array();
+    var groupsID = new Array()
     qcm.groups.forEach(element => {
         groupsID.push(ObjectId(element._id))    
     });
     console.log(groupsID)
+    var affGroupArray = qcm.groups
 
     //Get available groups
     const collection = db.collection('groups')
@@ -40,13 +39,13 @@ router.get('/', async (req, res, next) =>{
     })
 
     console.log(availableResultSet)
-
     
     client.close()
 
     res.render('assignGroup', {
         title: 'Gestion des Groupes',
         quiz: qcm,
+        affectedGroup: affGroupArray,
         availableGroups: availableResultSet
     })
 })
@@ -61,15 +60,21 @@ router.post('/linkGroup', async (req, res) => {
             { useNewUrlParser: true }
         )
         const db = client.db('gl52')        
-        const collection = db.collection('groups')
 
-        const groupDocument = await collection.findOne({_id: ObjectId(req.query.groupId)})
-        
-        console.log(groupDocument)
+        //Set group's rigths
+        var infos = req.body
+        read = false
+        write = false
+        if(infos.read){
+            read = true
+        }
+        if(infos.write){
+            write = true
+        }
 
         const qcmCollection = db.collection('questionnaires')
         
-        qcmCollection.updateOne({_id: ObjectId(quid)}, {$push:{groups: groupDocument}})
+        qcmCollection.updateOne({_id: ObjectId(quid)}, {$push:{groups: {id: ObjectId(req.query.groupId), rigths: {read: read, write: write }}}})
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
@@ -88,15 +93,34 @@ router.post('/delinkGroup', async (req, res) => {
             { useNewUrlParser: true }
         )
         const db = client.db('gl52')        
-        const collection = db.collection('groups')
+        const collection = db.collection('questionnaires')
+        const qcmDocument = await collection.findOne({_id: ObjectId(quid)})
 
-        const groupDocument = await collection.findOne({_id: ObjectId(req.query.groupId)})
+        /*
+        //Set group's rigths
+        var infos = req.body
+        read = false
+        write = false
+        if(infos.read){
+            read = true
+        }
+        if(infos.write){
+            write = true
+        }
+        */
+        var selectedGroup
+        qcmDocument.groups.forEach(group => {
+            if (ObjectId(req.query.groupId) = group.id)
+            {  
+              selectedGroup = group
+            }  
+        });
         
-        console.log(groupDocument)
+        console.log(selectedGroup)
 
         const qcmCollection = db.collection('questionnaires')
         
-        qcmCollection.updateOne({_id: ObjectId(quid)}, {$pull:{groups: groupDocument}})
+        qcmCollection.updateOne({_id: ObjectId(quid)}, {$pull:{groups: selectedGroup}})
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
