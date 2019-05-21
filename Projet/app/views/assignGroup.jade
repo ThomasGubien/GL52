@@ -13,13 +13,20 @@ block content
             tr
               th(scope='col') #
               th(scope='col') Nom Groupe
+              th(scope='col') Droits d'accès
               th(scope='col') Gestionnaire
               th(scope='col') Actions
           tbody
-            for group in quiz.groups
+            for group in affectedGroup
               tr
                 td= group._id
                 td= group.name
+                td           
+                  if(group.right)  
+                    label Droit de lecture
+                    input(type='checkbox', name='read', value=quiz.group.right.read)
+                    label Droit d'écriture
+                    input(type='checkbox', name='write', value=quiz.group.right.write) 
                 td= group.gestionnaire
                 td.t(style='width:20%')
                   form(action='/assignGroup/delinkGroup?groupId='+group._id, method='POST')
@@ -38,14 +45,12 @@ block content
         table.table
           thead
             tr
-              th(scope='col') #
               th(scope='col') Nom Groupe
               th(scope='col') Gestionnaire
               th(scope='col') Actions
           tbody
             for group in availableGroups
               tr
-                td= group._id
                 td= group.name
                 td= group.gestionnaire
                 td.t(style='width:20%')
@@ -56,4 +61,8 @@ block content
                       i.fa.fa-trash
                     button.btn.btn-dark.btn-sm(type='close')
                       i.fa.fa-ban 
+                    label Droit de lecture
+                    input(type='checkbox', name='read', value='read') 
+                    label Droit d'écriture
+                    input(type='checkbox', name='write', value='write') 
                     button(type='submit') Assigner un groupe
