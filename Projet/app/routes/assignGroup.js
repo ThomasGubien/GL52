@@ -26,15 +26,12 @@ router.get('/', async (req, res, next) =>{
     const allGroups = await grpCollection.find().toArray()   
     var affGroupArray = new Array()
     var availableGroupsArray = new Array()
-    console.log(qcm)
     var groupsID = new Array()
     if(typeof qcm.groups !== 'undefined' && qcm.groups.length > 0)
     {
         qcm.groups.forEach(element => {
             groupsID.push(ObjectId(element._id)) 
         });
-        console.log(groupsID) 
-        console.log(allGroups)
 
         qcm.groups.forEach(element => {
             allGroups.forEach(grp => {
@@ -54,7 +51,8 @@ router.get('/', async (req, res, next) =>{
         }
     });
 
-    console.log(availableGroupsArray)
+    //console.log(affGroupArray)
+    //console.log(availableGroupsArray)
     
     client.close()
 
@@ -120,7 +118,7 @@ router.post('/delinkGroup', async (req, res) => {
             }  
         });
         
-        console.log(selectedGroup)
+        //console.log(selectedGroup)
 
         const qcmCollection = db.collection('questionnaires')
         
@@ -135,8 +133,8 @@ router.post('/delinkGroup', async (req, res) => {
 
 
 router.post('/modifyRightsGroup', async (req, res) => {
-    console.log('delinkGroup/groupID ' + req.query.groupId)
-    console.log('delinkGroup/quid ' + quid)
+    console.log('modifyRightsGroup/groupID ' + req.query.groupId)
+    console.log('modifyRightsGroup/quid ' + quid)
     if(req.query.groupId !== null){
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -147,13 +145,10 @@ router.post('/modifyRightsGroup', async (req, res) => {
         const qcmCollection = db.collection('questionnaires')
         const qcmDocument = await qcmCollection.findOne({_id: ObjectId(quid)})
 
-        
-        console.log(infos.read)
-        console.log(infos.write)
         //Set group's rights
         var infos = req.body
         var read = false
-        var write = false
+        var write = false        
         if(infos.read){
             read = true
         }
@@ -161,17 +156,7 @@ router.post('/modifyRightsGroup', async (req, res) => {
             write = true
         }
         
-        var selectedGroup
-        qcmDocument.groups.forEach(group => {
-            if (ObjectId(req.query.groupId) == group.id)
-            {  
-              selectedGroup = group
-            }  
-        });
-        
-        console.log(selectedGroup)
-        
-        qcmCollection.updateOne({_id: ObjectId(quid)}, {$push:{groups: {id: ObjectId(req.query.groupId), rights: {read: read, write: write }}}})
+        qcmCollection.updateOne({_id: ObjectId(quid), "groups.id": ObjectId(req.query.groupId)}, {$set:{"groups.$.rights.read": read, "groups.$.rights.write": write }})
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
