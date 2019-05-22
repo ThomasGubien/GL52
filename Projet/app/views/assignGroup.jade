@@ -22,11 +22,13 @@ block content
                 td= group._id
                 td= group.name
                 td           
-                  if(group.right)  
-                    label Droit de lecture
-                    input(type='checkbox', name='read', value=quiz.group.right.read)
-                    label Droit d'écriture
-                    input(type='checkbox', name='write', value=quiz.group.right.write) 
+                  if(group.rights)  
+                    form(action='/assignGroup/modifyRightsGroup?groupId='+group._id, method='POST')
+                      label Droit de lecture
+                      input(type='checkbox', name='read', value=group.rights.read, checked=group.rights.read)
+                      label Droit d'écriture
+                      input(type='checkbox', name='write', value=group.rights.write, checked=group.rights.write)
+                      button(type='submit') Appliquer les droits
                 td= group.gestionnaire
                 td.t(style='width:20%')
                   form(action='/assignGroup/delinkGroup?groupId='+group._id, method='POST')

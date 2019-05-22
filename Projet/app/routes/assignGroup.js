@@ -4,7 +4,7 @@ const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
 
-const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
+const URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
 var quid
 
@@ -20,25 +20,41 @@ router.get('/', async (req, res, next) =>{
     quid = req.query.quizId;
 
     const qcmCollection = db.collection('questionnaires')
+    const grpCollection = db.collection('groups')
 
-    const qcm = await qcmCollection.findOne({_id: ObjectId(quid)})
-
+    var qcm = await qcmCollection.findOne({_id: ObjectId(quid)})
+    const allGroups = await grpCollection.find().toArray()   
+    var affGroupArray = new Array()
+    var availableGroupsArray = new Array()
     console.log(qcm)
     var groupsID = new Array()
-    qcm.groups.forEach(element => {
-        groupsID.push(ObjectId(element._id))    
+    if(typeof qcm.groups !== 'undefined' && qcm.groups.length > 0)
+    {
+        qcm.groups.forEach(element => {
+            groupsID.push(ObjectId(element._id)) 
+        });
+        console.log(groupsID) 
+        console.log(allGroups)
+
+        qcm.groups.forEach(element => {
+            allGroups.forEach(grp => {
+                if(element.id.toString() == grp._id.toString())
+                {
+                    grp.rights = element.rights
+                    affGroupArray.push(grp)
+                }
+            });
+        });
+    }
+
+    allGroups.forEach(grp => {
+        if (!affGroupArray.includes(grp))
+        {
+            availableGroupsArray.push(grp)
+        }
     });
-    console.log(groupsID)
-    var affGroupArray = qcm.groups
 
-    //Get available groups
-    const collection = db.collection('groups')
-    const availableGroups = await collection.find({_id: {"$nin": groupsID}}).toArray()
-    const availableResultSet = availableGroups.map((availGroup, _id) => {
-        return availGroup
-    })
-
-    console.log(availableResultSet)
+    console.log(availableGroupsArray)
     
     client.close()
 
@@ -46,7 +62,7 @@ router.get('/', async (req, res, next) =>{
         title: 'Gestion des Groupes',
         quiz: qcm,
         affectedGroup: affGroupArray,
-        availableGroups: availableResultSet
+        availableGroups: availableGroupsArray
     })
 })
 
@@ -61,10 +77,10 @@ router.post('/linkGroup', async (req, res) => {
         )
         const db = client.db('gl52')        
 
-        //Set group's rigths
+        //Set group's rights
         var infos = req.body
-        read = false
-        write = false
+        var read = false
+        var write = false
         if(infos.read){
             read = true
         }
@@ -74,7 +90,7 @@ router.post('/linkGroup', async (req, res) => {
 
         const qcmCollection = db.collection('questionnaires')
         
-        qcmCollection.updateOne({_id: ObjectId(quid)}, {$push:{groups: {id: ObjectId(req.query.groupId), rigths: {read: read, write: write }}}})
+        qcmCollection.updateOne({_id: ObjectId(quid)}, {$push:{groups: {id: ObjectId(req.query.groupId), rights: {read: read, write: write }}}})
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
@@ -96,21 +112,9 @@ router.post('/delinkGroup', async (req, res) => {
         const collection = db.collection('questionnaires')
         const qcmDocument = await collection.findOne({_id: ObjectId(quid)})
 
-        /*
-        //Set group's rigths
-        var infos = req.body
-        read = false
-        write = false
-        if(infos.read){
-            read = true
-        }
-        if(infos.write){
-            write = true
-        }
-        */
         var selectedGroup
         qcmDocument.groups.forEach(group => {
-            if (ObjectId(req.query.groupId) = group.id)
+            if (req.query.groupId.toString() == group.id.toString())
             {  
               selectedGroup = group
             }  
@@ -121,6 +125,53 @@ router.post('/delinkGroup', async (req, res) => {
         const qcmCollection = db.collection('questionnaires')
         
         qcmCollection.updateOne({_id: ObjectId(quid)}, {$pull:{groups: selectedGroup}})
+
+        //Debug
+        //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
+        //console.log(debugQcmDocument)
+        res.redirect('/assignGroup?quizId='+quid)
+    }
+})
+
+
+router.post('/modifyRightsGroup', async (req, res) => {
+    console.log('delinkGroup/groupID ' + req.query.groupId)
+    console.log('delinkGroup/quid ' + quid)
+    if(req.query.groupId !== null){
+        var ObjectId = require('mongodb').ObjectID;
+        const client = await MongoClient.connect(
+            URL,
+            { useNewUrlParser: true }
+        )
+        const db = client.db('gl52')        
+        const qcmCollection = db.collection('questionnaires')
+        const qcmDocument = await qcmCollection.findOne({_id: ObjectId(quid)})
+
+        
+        console.log(infos.read)
+        console.log(infos.write)
+        //Set group's rights
+        var infos = req.body
+        var read = false
+        var write = false
+        if(infos.read){
+            read = true
+        }
+        if(infos.write){
+            write = true
+        }
+        
+        var selectedGroup
+        qcmDocument.groups.forEach(group => {
+            if (ObjectId(req.query.groupId) == group.id)
+            {  
+              selectedGroup = group
+            }  
+        });
+        
+        console.log(selectedGroup)
+        
+        qcmCollection.updateOne({_id: ObjectId(quid)}, {$push:{groups: {id: ObjectId(req.query.groupId), rights: {read: read, write: write }}}})
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
