@@ -1,7 +1,5 @@
 extends layout
 
-script(src="routes/assignGroup.js")
-
 block content
   .col-md-6
     .card
@@ -23,7 +21,7 @@ block content
                   td= group.gestionnaire
                   td           
                     if(group.rights)  
-                      form(action='/assignGroup/modifyRightsGroup?groupId='+group._id, method='POST')
+                      form(action='/quiz/manage/modifyRightsGroup/#{quiz._id}/#{group._id}', method='POST')
                         .col-md-6.form-check
                           label Lecture 
                           input(type='checkbox', name='read', value='#{ JSON.stringify((group.rights.read))}', checked=group.rights.read)
@@ -34,7 +32,7 @@ block content
                           button.btn.btn-warning.btn-sm(type='submit')
                             i.fa.fa-pencil
                   td.t(style='width:20%')
-                    form(action='/assignGroup/delinkGroup?groupId='+group._id, method='POST')
+                    form(action='/quiz/manage/delinkGroup/#{quiz._id}/#{group._id}', method='POST')
                       button.btn.btn-danger.btn-sm(type='submit') 
                         i.fa.fa-ban
   .col-md-6
@@ -55,7 +53,7 @@ block content
                   td= group.name
                   td= group.gestionnaire
                   td
-                    form(action='/assignGroup/linkGroup?groupId='+group._id, method='POST')
+                    form(action='/quiz/manage/linkGroup/#{quiz._id}/#{group._id}', method='POST')
                       .col-md-6.form-check
                         label Lecture
                         input(type='checkbox', name='read', value='read') 

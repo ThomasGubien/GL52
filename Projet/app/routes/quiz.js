@@ -47,6 +47,152 @@ router.get('/manage', async (req, res, next) => {
     })
 })
 
+
+router.get('/manage/:quiz_id', async (req, res, next) => {
+    var ObjectId = require('mongodb').ObjectID;
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const qcmCollection = db.collection('questionnaires')
+    const grpCollection = db.collection('groups')
+
+    var qcm = await qcmCollection.findOne({ _id: ObjectId(req.params.quiz_id) })
+    const allGroups = await grpCollection.find().toArray()
+    var affGroupArray = new Array()
+    var availableGroupsArray = new Array()
+    var groupsID = new Array()
+    if (typeof qcm.groups !== 'undefined' && qcm.groups.length > 0) {
+        qcm.groups.forEach(element => {
+            groupsID.push(ObjectId(element._id))
+        });
+
+        qcm.groups.forEach(element => {
+            allGroups.forEach(grp => {
+                if (element.id.toString() == grp._id.toString()) {
+                    grp.rights = element.rights
+                    affGroupArray.push(grp)
+                }
+            });
+        });
+    }
+
+    allGroups.forEach(grp => {
+        if (!affGroupArray.includes(grp)) {
+            availableGroupsArray.push(grp)
+        }
+    });
+
+    console.log(qcm)
+    console.log(affGroupArray)
+    console.log(availableGroupsArray)
+
+    client.close()
+
+    res.render('assignGroup', {
+        title: 'Gestion des Groupes',
+        quiz: qcm,
+        affectedGroup: affGroupArray,
+        availableGroups: availableGroupsArray
+    })
+})
+
+router.post('/manage/linkGroup/:quiz_id/:group_id', async (req, res) => {
+    if (req.params.group_id !== null) {
+        var ObjectId = require('mongodb').ObjectID;
+        const client = await MongoClient.connect(
+            URL,
+            { useNewUrlParser: true }
+        )
+        const db = client.db('gl52')
+
+        //Set group's rights
+        var infos = req.body
+        var read = false
+        var write = false
+        if (infos.read) {
+            read = true
+        }
+        if (infos.write) {
+            write = true
+        }
+
+        const qcmCollection = db.collection('questionnaires')
+
+        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id) }, { $push: { groups: { id: ObjectId(req.params.group_id), rights: { read: read, write: write } } } })
+
+        //Debug
+        //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
+        //console.log(debugQcmDocument)
+        res.redirect('/quiz/manage/' + req.params.quiz_id)
+    }
+})
+
+
+router.post('/manage/delinkGroup/:quiz_id/:group_id', async (req, res) => {
+    if (req.params.quiz_id !== null) {
+        var ObjectId = require('mongodb').ObjectID;
+        const client = await MongoClient.connect(
+            URL,
+            { useNewUrlParser: true }
+        )
+        const db = client.db('gl52')
+        const collection = db.collection('questionnaires')
+        const qcmDocument = await collection.findOne({ _id: ObjectId(req.params.quiz_id) })
+
+        var selectedGroup
+        qcmDocument.groups.forEach(group => {
+            if (req.params.group_id.toString() == group.id.toString()) {
+                selectedGroup = group
+            }
+        });
+
+        //console.log(selectedGroup)
+
+        const qcmCollection = db.collection('questionnaires')
+
+        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id) }, { $pull: { groups: selectedGroup } })
+
+        //Debug
+        //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
+        //console.log(debugQcmDocument)
+        res.redirect('/quiz/manage/' + req.params.quiz_id)
+    }
+})
+
+
+router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', async (req, res) => {
+    if (req.params.quiz_id !== null) {
+        var ObjectId = require('mongodb').ObjectID;
+        const client = await MongoClient.connect(
+            URL,
+            { useNewUrlParser: true }
+        )
+        const db = client.db('gl52')
+        const qcmCollection = db.collection('questionnaires')
+        const qcmDocument = await qcmCollection.findOne({ _id: ObjectId(req.params.quiz_id) })
+
+        //Set group's rights
+        var infos = req.body
+        var read = false
+        var write = false
+        if (infos.read) {
+            read = true
+        }
+        if (infos.write) {
+            write = true
+        }
+
+        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id), "groups.id": ObjectId(req.params.group_id) }, { $set: { "groups.$.rights.read": read, "groups.$.rights.write": write } })
+
+        //Debug
+        //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
+        //console.log(debugQcmDocument)
+        res.redirect('/quiz/manage/' + req.params.quiz_id)
+    }
+})
+
 router.get('/answer', async (req, res, next) => {
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
