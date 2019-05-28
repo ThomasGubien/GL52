@@ -60,7 +60,13 @@ function addAnswer(nbC) {
     div.innerHTML =
 		`<label> Question </label>\
 		<input type="text" name="question" value="" />\
-		<input type="button" class="button btn btn-sm btn-info" value="Add Answer" onclick="addAnswer(${nbclicks})">`
+		<input type="button" class="button btn btn-sm btn-info" value="Add Answer" onclick="addAnswer(${nbclicks})">\
+		<br>\
+		<label> Durée maximum </label>\
+		<input type="number" min="5" step="5" name="Durée" value="5" />\			
+		<label> Minutes </label>\		
+		<input type="checkbox" name="check" value="false" />\		
+		<label> Temps illimité </label>`
 
 	document.getElementById('qcm').appendChild(div);
 	nbclicks++

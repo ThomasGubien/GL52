@@ -9,6 +9,11 @@ block content
         form(action='/quiz/new', method='POST',id='qcm')
           label Quiz Name
           input.form-control(type='text', name='nomqcm', placeholder='Name')
+          label Durée maximum
+          input.form-control(type='number', name='dureeqcm', value='5', min="5", step="5") 
+          label Minute   
+          input(type='checkbox', name='infiniteTime', value='false')    
+          label Durée illimitée   
           br
           label Authorized groups
           select.form-control(name='usersgrp', multiple='multiple') 

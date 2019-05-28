@@ -116,7 +116,16 @@ router.post('/new', async (req, res)=>{
     const questions=qcm.question.map((value,index)=>{
         return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null)}
     })
-    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
+
+    //Set duration
+    let time
+    if(qcm.infiniteTime){
+        time = 0
+    } else {
+        time = qcm.dureeqcm 
+    }
+
+    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm, duration: time}
     await collection.insertOne(questionnaire)
     client.close()
     res.redirect('/quiz/manage')
