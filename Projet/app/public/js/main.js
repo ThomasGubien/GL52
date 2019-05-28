@@ -63,9 +63,9 @@ function addAnswer(nbC) {
 		<input type="button" class="button btn btn-sm btn-info" value="Add Answer" onclick="addAnswer(${nbclicks})">\
 		<br>\
 		<label> Durée maximum </label>\
-		<input type="number" min="5" step="5" name="Durée" value="5" />\			
+		<input type="number" min="5" step="5" name="durQuiz${nbclicks}" value="5" />\			
 		<label> Minutes </label>\		
-		<input type="checkbox" name="check" value="false" />\		
+		<input type="checkbox" name="illTimeQuiz${nbclicks}" value='true'/>\		
 		<label> Temps illimité </label>`
 
 	document.getElementById('qcm').appendChild(div);

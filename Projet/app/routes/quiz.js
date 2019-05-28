@@ -113,8 +113,17 @@ router.post('/new', async (req, res)=>{
     if(typeof(qcm.question)==='string'){
         qcm.question=[qcm.question]
     }
+    console.log(qcm)
+    let sumQuestTime
+    let questTime
     const questions=qcm.question.map((value,index)=>{
-        return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null)}
+        if(qcm[`illTimeQuiz${index}`]){
+            questTime = 0
+        } else {
+            questTime = (qcm[`durQuiz${index}`])
+        }
+    
+        return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null), duration: questTime}
     })
 
     //Set duration
