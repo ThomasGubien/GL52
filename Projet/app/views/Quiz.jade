@@ -1,12 +1,40 @@
 extends layout
 
+
 block content
   .col-md-10.offset-md-1
     form(action='/quiz/newAnswers/#{quiz.title}', method='POST')
       .card
         .card-header
-          strong Quiz: #{quiz.title}
-        .card-body.card-block
+          strong Quiz: #{quiz.title} 
+          script.
+            document.addEventListener("DOMContentLoaded", function() { 
+              let sec = 0
+              let min = 0
+              let secEle = document.querySelector('.seco')
+              let minEle = document.querySelector('.minu')
+              secEle.innerHTML = sec
+              minEle.innerHTML = min
+              function updateTimer(){ setInterval(() =>{
+                  sec += 1
+                  if(sec > 60){
+                      sec = 0
+                      min += 1
+                  }
+                  secEle.innerHTML = sec
+                  minEle.innerHTML = min
+                },1000)
+              }
+              setTimeout(() =>{
+                alert("Temps écoulé")       
+                window.location = '/quiz/answer'
+              },"#{quiz.duration}"*60*1000)  
+            })          
+        .card-body.card-block(onload="updateTimer()")
+          label Temps écoulé: 
+          .minu #{minu} :
+          .seco #{seco} 
+          label / #{minutes} : #{seconds}            
           for q in questions
             .col-md-12
               label
@@ -23,4 +51,6 @@ block content
                               input(type='checkbox', name='#{q.question}', value='#{a}')
         .card-footer
           .text-center
-            button.btn.btn-lg.btn-info.btn-block(type='submit') Submit
+            button.btn.btn-lg.btn-info.btn-block(type='submit') Submit 
+          
+ 
