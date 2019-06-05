@@ -8,10 +8,9 @@ block content
         .card-header
           strong Quiz: #{quiz.title}           
         .card-body.card-block
-          label Temps écoulé:
-          .minu #{minu} :
-          .seco #{seco} 
-          label / #{minutes} : #{seconds}            
+          .t(style='font-style: italic; text-align:right')
+            //label Temps écoulé:
+            .timeElapsed           
           for q in questions
             .col-md-12
               label
@@ -34,18 +33,15 @@ block content
               if ("#{quiz.duration}" > 0 ){
                 let sec = 0
                 let min = 0
-                let secEle = document.querySelector('.seco')
-                let minEle = document.querySelector('.minu')
-                secEle.innerHTML = sec
-                minEle.innerHTML = min
+                let timeElem = document.querySelector('.timeElapsed')
+                timeElem.innerHTML = "Time elapsed: " + min + 'min' + ' ' + sec + 's' + " / #{minutes}min #{seconds}s "
                 setInterval(() =>{
                     sec += 1
                     if(sec > 60){
                         sec = 0
                         min += 1
                     }
-                    secEle.innerHTML = sec
-                    minEle.innerHTML = min
+                    timeElem.innerHTML = "Time elapsed: " + min + 'min' + ' ' + sec + 's' + " / #{minutes}min #{seconds}s "
                   },1000)
                 setTimeout(() =>{
                   alert("Temps écoulé")       

@@ -19,7 +19,9 @@ block content
                   td= q.title
                   td
                     for g in q.groups
-                      a #{g} 
+                      for gr in groups
+                        if gr._id == g.id
+                          a #{gr.name} 
                   td.t(style='width:20%')
                     if q.title == 'test'
                       form(action='/quiz/startQuiz/#{q.title}')

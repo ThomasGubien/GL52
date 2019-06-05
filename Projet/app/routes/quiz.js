@@ -59,12 +59,16 @@ router.get('/answer', async (req, res, next) => {
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
+    console.log(quizarr[0])
+    const collection2 = db.collection('groups')
+    const grps = collection2.find().toArray();
     client.close()
     console.log(quizarr)
     res.render('answerQuiz', {
         chemin: 'Quiz',
         title: 'Answer',
-        quiz: quizarr
+        quiz: quizarr,
+        groups: grps
     })
 })
 
