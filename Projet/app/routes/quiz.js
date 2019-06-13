@@ -59,12 +59,16 @@ router.get('/answer', async (req, res, next) => {
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
+    console.log(quizarr[0])
+    const collection2 = db.collection('groups')
+    const grps = collection2.find().toArray();
     client.close()
     console.log(quizarr)
     res.render('answerQuiz', {
         chemin: 'Quiz',
         title: 'Answer',
-        quiz: quizarr
+        quiz: quizarr,
+        groups: grps
     })
 })
 
@@ -77,6 +81,8 @@ router.get('/startQuiz/:quiz_id', async (req, res, next) => {
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
     const q = await collection.findOne({ title: req.params.quiz_id })
+    let minu = q.duration 
+    let secd = Math.floor(q.duration / 60)
    
     client.close()
     console.log(q)
@@ -84,10 +90,55 @@ router.get('/startQuiz/:quiz_id', async (req, res, next) => {
         chemin: 'Quiz',
         title: 'Answer',
         quiz: q,
+        minutes: minu,
+        seconds: secd,
         questions: q.questions
     })
+    /*
+    //Quiz timing
+    
+    setTimeout((arg) =>{
+        console.log('End quizTimeout')
+        clearInterval(timerDisplayed)        
+        res.redirect('/quiz/answer')
+    },q.duration+6000)
+
+
+
+    let sec = 0
+  let min = 0
+  //Timer duration in millisecond q.duration*60*1000  1s = 1000 ms
+  const timerDisplayed = setInterval((arg) =>{
+    console.log(sec, min)
+    sec += 1
+    if(sec > 60){
+        sec = 0
+        min += 1
+    }
+    console.log('Quiz Interval : ' + min + ':' + sec)
+  },1000)
+
+  setTimeout(function() =>{
+      console.log('End quizTimeout')
+      clearInterval(timerDisplayed)        
+      window.location = '/quiz/answer'
+  },quiz.duration+6000)
+*/
 })
 
+/*
+//Time Progress bar
+const ProgressBar = require('progress');
+
+const bar = new ProgressBar(':bar', { total: 10 });
+const timer = setInterval(function () {
+  bar.tick();
+  if (bar.complete) {
+    console.log('\ncomplete\n');
+    clearInterval(timer);
+  }
+}, 100);
+*/
 router.post('/newAnswers/:quiz_id', async (req, res) => {
     const client = await MongoClient.connect(
         URL,
@@ -113,10 +164,28 @@ router.post('/new', async (req, res)=>{
     if(typeof(qcm.question)==='string'){
         qcm.question=[qcm.question]
     }
+    console.log(qcm)
+    let sumQuestTime
+    let questTime
     const questions=qcm.question.map((value,index)=>{
-        return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null)}
+        if(qcm[`illTimeQuiz${index}`]){
+            questTime = 0
+        } else {
+            questTime = (qcm[`durQu7y7y0iz${index}`])
+        }
+    
+        return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null), duration: questTime}
     })
-    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
+
+    //Set duration
+    let time
+    if(qcm.infiniteTime){
+        time = 0
+    } else {
+        time = qcm.dureeqcm 
+    }
+
+    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm, duration: time}
     await collection.insertOne(questionnaire)
     client.close()
     res.redirect('/quiz/manage')

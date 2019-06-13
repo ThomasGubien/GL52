@@ -1,12 +1,16 @@
 extends layout
 
+
 block content
   .col-md-10.offset-md-1
     form(action='/quiz/newAnswers/#{quiz.title}', method='POST')
       .card
         .card-header
-          strong Quiz: #{quiz.title}
+          strong Quiz: #{quiz.title}           
         .card-body.card-block
+          .t(style='font-style: italic; text-align:right')
+            //label Temps écoulé:
+            .timeElapsed           
           for q in questions
             .col-md-12
               label
@@ -24,3 +28,26 @@ block content
         .card-footer
           .text-center
             button.btn.btn-lg.btn-info.btn-block(type='submit') Submit
+          script.
+            document.addEventListener("DOMContentLoaded", function() { 
+              if ("#{quiz.duration}" > 0 ){
+                let sec = 0
+                let min = 0
+                let timeElem = document.querySelector('.timeElapsed')
+                timeElem.innerHTML = "Time elapsed: " + min + 'min' + ' ' + sec + 's' + " / #{minutes}min #{seconds}s "
+                setInterval(() =>{
+                    sec += 1
+                    if(sec > 60){
+                        sec = 0
+                        min += 1
+                    }
+                    timeElem.innerHTML = "Time elapsed: " + min + 'min' + ' ' + sec + 's' + " / #{minutes}min #{seconds}s "
+                  },1000)
+                setTimeout(() =>{
+                  alert("Temps écoulé")       
+                  window.location = '/quiz/answer'
+                },"#{quiz.duration}"*60*1000)  
+              }
+            })           
+          
+ 

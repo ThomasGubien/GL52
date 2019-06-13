@@ -1,0 +1,67 @@
+extends layout
+
+script(src="routes/assignGroup.js")
+
+block content
+  .col-md-6
+    .card
+      .card-header
+        strong Groupes affectées au questionnaire
+      .card-body.card-block
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') Nom du groupe
+                th(scope='col') Gestionnaire
+                th(scope='col') Droits d'accès
+                th(scope='col') Desassigner
+            tbody
+              for group in affectedGroup
+                tr
+                  td= group.name
+                  td= group.gestionnaire
+                  td           
+                    if(group.rights)  
+                      form(action='/assignGroup/modifyRightsGroup?groupId='+group._id, method='POST')
+                        .col-md-6.form-check
+                          label Lecture 
+                          input(type='checkbox', name='read', value='#{ JSON.stringify((group.rights.read))}', checked=group.rights.read)
+                          br
+                          label Ecriture 
+                          input(type='checkbox', name='write', value='#{ JSON.stringify((group.rights.write))}', checked=group.rights.write)
+                        .col-md-6
+                          button.btn.btn-warning.btn-sm(type='submit')
+                            i.fa.fa-pencil
+                  td.t(style='width:20%')
+                    form(action='/assignGroup/delinkGroup?groupId='+group._id, method='POST')
+                      button.btn.btn-danger.btn-sm(type='submit') 
+                        i.fa.fa-ban
+  .col-md-6
+    .card
+      .card-header
+        strong Liste des groupes
+      .card-body.card-block
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') Nom du groupe
+                th(scope='col') Gestionnaire
+                th(scope='col') Droits d'accès
+            tbody
+              for group in availableGroups
+                tr
+                  td= group.name
+                  td= group.gestionnaire
+                  td
+                    form(action='/assignGroup/linkGroup?groupId='+group._id, method='POST')
+                      .col-md-6.form-check
+                        label Lecture
+                        input(type='checkbox', name='read', value='read') 
+                        br
+                        label Ecriture
+                        input(type='checkbox', name='write', value='write') 
+                      .col-md-6
+                        button.btn.btn-success.btn-sm(type='submit') 
+                          i.fa.fa-check

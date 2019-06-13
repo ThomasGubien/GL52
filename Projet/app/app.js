@@ -13,6 +13,7 @@ const signupRouter = require('./routes/signup')
 var userRouter = require('./routes/users');
 const quizRouter = require('./routes/quiz')
 const fileRouter = require('./routes/files')
+var assignGroupRouter = require('./routes/assignGroup');
 const administrationRouter = require('./routes/administration')
 
 var app = express();
@@ -35,6 +36,7 @@ app.use('/user', userRouter);
 app.use('/quiz', quizRouter)
 app.use('/file', fileRouter)
 app.use('/administration', administrationRouter)
+app.use('/assignGroup', assignGroupRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
