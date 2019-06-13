@@ -1,0 +1,29 @@
+extends layout
+
+
+block content
+  .col-md-10.offset-md-1
+    .card
+      .card-header
+        strong Quiz: #{quiz.title}           
+      .card-body.card-block   
+        for q in questions
+          .col-md-12
+            label
+              strong Question: #{q.question}
+            .card
+              .card-body.card-block
+                .text-center
+                  table.table
+                    tbody
+                      for a in q.answers
+                        if answers.#{q.question} == q.corectAnswer 
+                          tr
+                            td.t(style='color:green') #{a}
+                            td 
+                              input(type='checkbox', value='#{a}', disabled, checked)
+                        else
+                          tr
+                            td.t(style='color:green') #{a}
+                            td 
+                              input(type='checkbox', value='#{a}', disabled)

@@ -23,8 +23,8 @@ block content
                         for a in q.answers
                           tr
                             td #{a}
-                            td 
-                              input(type='checkbox', name='#{q.question}', value='#{a}')
+                            td
+                              input(type='checkbox', name='answer', value='#{a}')
         .card-footer
           .text-center
             button.btn.btn-lg.btn-info.btn-block(type='submit') Submit

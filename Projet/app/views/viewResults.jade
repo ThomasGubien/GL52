@@ -21,11 +21,6 @@ block content
                     for g in q.groups
                       a #{g} 
                   td.t(style='width:20%')
-                    if q.title == 'test'
-                      form(action='/quiz/startQuiz/#{q.title}')
-                        button.btn.btn-primary.btn-sm(type='submit').t(style='width:100%')
-                          a Take Exam
-                    else
-                      form(action='/quiz/result/#{q.title}')
-                        button.btn.btn-secondary.btn-sm(type='result').t(style='width:100%')
-                          a View result
+                    form(action='/quiz/result/#{q.title}')
+                      button.btn.btn-secondary.btn-sm(type='result').t(style='width:100%')
+                        a View result
