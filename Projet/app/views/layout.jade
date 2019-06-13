@@ -71,6 +71,17 @@ html
                 li
                   i.fa.fa-table
                   a(href='tables-data.html') Data Table
+            li.menu-item-has-children.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                i.menu-icon.fa.fa-certificate
+                | Projects
+              ul.sub-menu.children.dropdown-menu
+                li
+                  i.fa.fa-table
+                  a(href='/projects/getList') List
+                li
+                  i.fa.fa-table
+                  a(href='/projects/create') Create
             h3.menu-title Utilisateurs
             // /.menu-title
             li.menu-item-has-children.dropdown

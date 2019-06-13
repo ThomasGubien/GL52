@@ -14,6 +14,7 @@ var userRouter = require('./routes/users');
 const quizRouter = require('./routes/quiz')
 const fileRouter = require('./routes/files')
 const administrationRouter = require('./routes/administration')
+const projects = require('./routes/projects')
 
 var app = express();
 app.use(fileUpload())
@@ -35,6 +36,7 @@ app.use('/user', userRouter);
 app.use('/quiz', quizRouter)
 app.use('/file', fileRouter)
 app.use('/administration', administrationRouter)
+app.use('/projects', projects)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
