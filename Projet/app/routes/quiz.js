@@ -223,13 +223,16 @@ router.get('/startQuiz/:quiz_id', async (req, res, next) => {
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
     const q = await collection.findOne({ title: req.params.quiz_id })
-   
+    let minu = q.duration
+    let secd = Math.floor(q.duration / 60)
     client.close()
     console.log(q)
     res.render('quiz', {
         chemin: 'Quiz',
         title: 'Answer',
         quiz: q,
+        minutes: minu,
+        seconds: secd,
         questions: q.questions
     })
 })
@@ -259,9 +262,26 @@ router.post('/new', async (req, res)=>{
     if(typeof(qcm.question)==='string'){
         qcm.question=[qcm.question]
     }
-    const questions=qcm.question.map((value,index)=>{
-        return {question:value,answers:(qcm[`answer${index}`]||null),correctAnswer:(qcm[`check${index}`]||null)}
+    console.log(qcm)
+    let sumQuestTime
+    let questTime
+    const questions = qcm.question.map((value, index) => {
+        if (qcm[`illTimeQuiz${index}`]) {
+            questTime = 0
+        } else {
+            questTime = (qcm[`durQu7y7y0iz${index}`])
+        }
+
+        return { question: value, answers: (qcm[`answer${index}`] || null), correctAnswer: (qcm[`check${index}`] || null), duration: questTime }
     })
+
+    //Set duration
+    let time
+    if (qcm.infiniteTime) {
+        time = 0
+    } else {
+        time = qcm.dureeqcm
+    }
     const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
     await collection.insertOne(questionnaire)
     client.close()
