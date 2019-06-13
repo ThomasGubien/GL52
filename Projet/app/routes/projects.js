@@ -54,17 +54,34 @@ router.post('/new', async (req, res) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('projects')
-    let qcm = req.body
-    if (typeof (qcm.question) === 'string') {
-        qcm.question = [qcm.question]
-    }
-    const questions = qcm.question.map((value, index) => {
-        return { question: value, answers: (qcm[`answer${index}`] || null), correctAnswer: (qcm[`check${index}`] || null) }
-    })
-    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm }
-    await collection.insertOne(questionnaire)
+    let prj = req.body
+    const project = { author: '5ca622b50a14fe182147ffdd', groups: [prj.usersgrp], title: prj.nomprj, description: prj.descprj }
+    await collection.insertOne(project)
     client.close()
     res.redirect('/projects/getList')
+})
+
+router.get('/getProject/:prj_id', async (req, res, next) => {
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('projects')
+    const p = await collection.findOne({ title: req.params.prj_id })
+    const collection2 = db.collection('files')
+    const arr = await collection2.find().toArray()
+    const filesarr = arr.map((qcm, index) => {
+        return qcm
+    })
+    client.close()
+    console.log(p)
+    res.render('project', {
+        chemin: 'Projects',
+        title: 'View',
+        project: p,
+        files: filesarr
+    })
 })
 
 module.exports = router

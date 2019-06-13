@@ -6,7 +6,7 @@ block content
       .card-header
         strong New Project
       .card-body.card-block
-        form(action='/project/new', method='POST',id='prj')
+        form(action='/projects/new', method='POST',id='prj')
           label Project Name
           input.form-control(type='text', name='nomprj', placeholder='Name')
           br
@@ -15,6 +15,8 @@ block content
             for g in groups
               option(value='#{g.name}')= g.name
           br
+          label Project Description
+          textarea.form-control(type='text', name='descprj', placeholder='Description', rows='5')
         br 
         br
         button.btn.btn-lg.btn-success.btn-block(type='submit', form='prj') Submit
