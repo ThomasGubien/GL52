@@ -244,7 +244,10 @@ router.post('/newAnswers/:quiz_id', async (req, res) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('answers')
-    const answers = { author: '5ca622b50a14fe182147ffdd', title: req.params.quiz_id, answers: req.body }
+    const result = _.map(req.body, (value, key) => {
+        return { question: key, answers: value }
+    })
+    const answers = { author: '5ca622b50a14fe182147ffdd', title: req.params.quiz_id, answers: result }
     await collection.insertOne(answers)
     client.close()
     console.log(req.body)

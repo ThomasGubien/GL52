@@ -21,7 +21,7 @@ block content
                     for g in q.groups
                       a #{g} 
                   td.t(style='width:20%')
-                    if q.title == 'test'
+                    if q.title == 'Result Test'
                       form(action='/quiz/startQuiz/#{q.title}')
                         button.btn.btn-primary.btn-sm(type='submit').t(style='width:100%')
                           a Take Exam

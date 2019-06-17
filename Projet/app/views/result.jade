@@ -16,14 +16,27 @@ block content
                 .text-center
                   table.table
                     tbody
-                      for a in q.answers
-                        if answers.#{q.question} == q.corectAnswer 
-                          tr
-                            td.t(style='color:green') #{a}
-                            td 
-                              input(type='checkbox', value='#{a}', disabled, checked)
-                        else
-                          tr
-                            td.t(style='color:green') #{a}
-                            td 
-                              input(type='checkbox', value='#{a}', disabled)
+                      for userAnswer in answers
+                        if userAnswer.question == q.question
+                          for answer in q.answers
+                            - var find = 0
+                            for ans in userAnswer.answers
+                              if ans == answer
+                                for correctAns in q.correctAnswer
+                                  if ans == correctAns
+                                    - find = 1
+                                    tr
+                                      td.t(style='color:#0AD400') #{answer}
+                                      td 
+                                        input(type='checkbox', value='#{answer}', disabled, checked)
+                                if find == 0
+                                  - find = 1
+                                  tr
+                                    td.t(style='color:red') #{answer}
+                                    td 
+                                      input(type='checkbox', value='#{answer}', disabled, checked)
+                            if find == 0
+                              tr
+                                td.t(style='color:grey') #{answer}
+                                td 
+                                  input(type='checkbox', value='#{answer}', disabled)
