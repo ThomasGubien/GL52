@@ -3,10 +3,11 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
+var session = require('express-session')
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
-router.get('/create', async  (req, res, next) =>{
+router.get('/create', checkSignIn, async  (req, res, next) =>{
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -26,7 +27,7 @@ router.get('/create', async  (req, res, next) =>{
     })
 })
 
-router.get('/manage', async (req, res, next) => {
+router.get('/manage', checkSignIn, async (req, res, next) => {
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -48,7 +49,7 @@ router.get('/manage', async (req, res, next) => {
 })
 
 
-router.get('/manage/:quiz_id', async (req, res, next) => {
+router.get('/manage/:quiz_id', checkSignIn, async (req, res, next) => {
     var ObjectId = require('mongodb').ObjectID;
     const client = await MongoClient.connect(
         URL,
@@ -98,7 +99,7 @@ router.get('/manage/:quiz_id', async (req, res, next) => {
     })
 })
 
-router.post('/manage/linkGroup/:quiz_id/:group_id', async (req, res) => {
+router.post('/manage/linkGroup/:quiz_id/:group_id', checkSignIn, async (req, res) => {
     if (req.params.group_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -130,7 +131,7 @@ router.post('/manage/linkGroup/:quiz_id/:group_id', async (req, res) => {
 })
 
 
-router.post('/manage/delinkGroup/:quiz_id/:group_id', async (req, res) => {
+router.post('/manage/delinkGroup/:quiz_id/:group_id', checkSignIn, async (req, res) => {
     if (req.params.quiz_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -162,7 +163,7 @@ router.post('/manage/delinkGroup/:quiz_id/:group_id', async (req, res) => {
 })
 
 
-router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', async (req, res) => {
+router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', checkSignIn, async (req, res) => {
     if (req.params.quiz_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -193,7 +194,8 @@ router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', async (req, res) => 
     }
 })
 
-router.get('/answer', async (req, res, next) => {
+router.get('/answer', checkSignIn, async (req, res, next) => {
+    var username = req.session.user.name
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -201,12 +203,17 @@ router.get('/answer', async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const arr = await collection.find().toArray()
+    const userinfo = await collection.findOne({ name: username })
+    const collection2 = db.collection('groups')
+    const userGrps = await collection2.find({ users: username }).toArray()
+    const UserGrpsNames = userGrps.map((grp, index) => {
+        return grp.name
+    })
+    const arr = await collection.find({ groups: { $in: UserGrpsNames }}).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
     client.close()
-    console.log(quizarr)
     res.render('answerQuiz', {
         chemin: 'Quiz',
         title: 'Answer',
@@ -214,7 +221,7 @@ router.get('/answer', async (req, res, next) => {
     })
 })
 
-router.get('/startQuiz/:quiz_id', async (req, res, next) => {
+router.get('/startQuiz/:quiz_id', checkSignIn, async (req, res, next) => {
     console.log('QCMID ' + req.params.quiz_id)
     const client = await MongoClient.connect(
         URL,
@@ -237,7 +244,8 @@ router.get('/startQuiz/:quiz_id', async (req, res, next) => {
     })
 })
 
-router.post('/newAnswers/:quiz_id', async (req, res) => {
+router.post('/newAnswers/:quiz_id', checkSignIn, async (req, res) => {
+    var usermail = req.session.user.email
     const client = await MongoClient.connect(
         URL,
         { useNewUrlParser: true }
@@ -247,14 +255,15 @@ router.post('/newAnswers/:quiz_id', async (req, res) => {
     const result = _.map(req.body, (value, key) => {
         return { question: key, answers: value }
     })
-    const answers = { author: '5ca622b50a14fe182147ffdd', title: req.params.quiz_id, answers: result }
+    const answers = { author: usermail, title: req.params.quiz_id, answers: result }
     await collection.insertOne(answers)
     client.close()
     console.log(req.body)
     res.redirect('/quiz/answer')
 })
 
-router.post('/new', async (req, res)=>{
+router.post('/new', checkSignIn, async (req, res) => {
+    var usermail = req.session.user.email
     const client = await MongoClient.connect(
         URL,
         { useNewUrlParser: true }
@@ -285,13 +294,13 @@ router.post('/new', async (req, res)=>{
     } else {
         time = qcm.dureeqcm
     }
-    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
+    const questionnaire = { author: usermail, groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
     await collection.insertOne(questionnaire)
     client.close()
     res.redirect('/quiz/manage')
 })
 
-router.get('/result/:quiz_id', async (req, res, next) => {
+router.get('/result/:quiz_id', checkSignIn, async (req, res, next) => {
     console.log('QCMID ' + req.params.quiz_id)
     const client = await MongoClient.connect(
         URL,
@@ -314,7 +323,8 @@ router.get('/result/:quiz_id', async (req, res, next) => {
     })
 })
 
-router.get('/list', async (req, res, next) => {
+router.get('/list', checkSignIn, async (req, res, next) => {
+    var username = req.session.user.name
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -322,7 +332,13 @@ router.get('/list', async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const arr = await collection.find().toArray()
+    const userinfo = await collection.findOne({ name: username })
+    const collection2 = db.collection('groups')
+    const userGrps = await collection2.find({ users: username }).toArray()
+    const UserGrpsNames = userGrps.map((grp, index) => {
+        return grp.name
+    })
+    const arr = await collection.find({ groups: { $in: UserGrpsNames }}).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
@@ -334,5 +350,16 @@ router.get('/list', async (req, res, next) => {
         quiz: quizarr
     })
 })
+
+function checkSignIn(req, res, next) {
+    if (req.session.user) {
+        next();     //If session exists, proceed to page
+    } else {
+        var err = new Error("Not logged in!");
+        console.log(req.session.user);
+        res.redirect('/login');
+        //next(err);  //Error, trying to access unauthorized page!
+    }
+}
 
 module.exports = router
