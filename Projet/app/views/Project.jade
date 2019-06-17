@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  .col-md-10.offset-md-1
+    .card
+      .card-header
+        strong Project: #{project.title}
+      .card-body.card-block
+        .col-md-12
+          label
+            strong Description:
+          p
+          | #{project.description}
+  .col-md-8.offset-md-2
+    .card
+      .card-header
+        strong Files List
+      .card-body.card-block
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') Title
+                th(scope='col') Filename
+                th(scope='col') Groups
+                th(scope='col') Action
+              tbody
+                for f in files
+                  tr
+                    td.t(style='width:20%')= f.name
+                    td= f.filename
+                    td
+                      for g in f.groups
+                        a #{g}
+                    td.t(style='width:20%')
+                      button.btn.btn-primary.btn-sm.btn-block(type='Download').t(style='width:100%')
+                        i.fa.fa-download

@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  .col-md-8.offset-md-2
+    .card
+      .card-header
+        strong Quiz List
+      .card-body.card-block
+        .text-center
+          table.table
+            thead
+              tr
+                th(scope='col') Title
+                th(scope='col') Groups
+                th(scope='col') Action
+            tbody
+              for p in projects
+                tr
+                  td= p.title
+                  td
+                    for g in p.groups
+                      a #{g} 
+                  td.t(style='width:20%')
+                    form(action='/projects/getProject/#{p.title}')
+                      button.btn.btn-primary.btn-sm(type='submit').t(style='width:100%')
+                        a View Project

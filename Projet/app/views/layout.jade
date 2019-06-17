@@ -40,11 +40,11 @@ html
             img(src='/images/logo2.png', alt='Logo')
         #main-menu.main-menu.collapse.navbar-collapse
           ul.nav.navbar-nav
-            li.active
+            //li.active
               a(href='/')
                 i.menu-icon.fa.fa-dashboard
                 | Dashboard
-            h3.menu-title Evaluations
+            //h3.menu-title
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
@@ -60,18 +60,22 @@ html
                 li
                   i.fa.fa-book
                   a(href='/quiz/answer') Answer
+                li
+                  i.fa.fa-certificate
+                  a(href='/quiz/answer') Results
+            h3.menu-title 
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-certificate
-                | Results
+                i.menu-icon.fa.fa-book
+                | Projects
               ul.sub-menu.children.dropdown-menu
                 li
                   i.fa.fa-table
-                  a(href='/quiz/list') Results
+                  a(href='/projects/getList') List
                 li
-                  i.fa.fa-table
-                  a(href='tables-data.html') Data Table
-            h3.menu-title Utilisateurs
+                  i.fa.fa-plus
+                  a(href='/projects/create') Create
+            h3.menu-title 
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
@@ -84,7 +88,7 @@ html
                 li
                   i.menu-icon.fa.fa-download
                   a(href='/file/download') Download
-            h3.menu-title Extras
+            h3.menu-title 
             // /.menu-title
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
@@ -97,17 +101,6 @@ html
                 li
                   i.menu-icon.fa.fa-terminal
                   a(href='/Administration') Administration
-            li.menu-item-has-children.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                i.menu-icon.fa.fa-glass
-                | Pages
-              ul.sub-menu.children.dropdown-menu
-                li
-                  i.menu-icon.fa.fa-sign-in
-                  a(href='/login') Login
-                li
-                  i.menu-icon.fa.fa-sign-in
-                  a(href='/signup') Register
         // /.navbar-collapse
     // /#left-panel
     // Left Panel

@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .col-md-8.offset-md-2
+    .card
+      .card-header
+        strong New Project
+      .card-body.card-block
+        form(action='/projects/new', method='POST',id='prj')
+          label Project Name
+          input.form-control(type='text', name='nomprj', placeholder='Name')
+          br
+          label Authorized groups
+          select.form-control(name='usersgrp', multiple='multiple') 
+            for g in groups
+              option(value='#{g.name}')= g.name
+          br
+          label Project Description
+          textarea.form-control(type='text', name='descprj', placeholder='Description', rows='5')
+        br 
+        br
+        button.btn.btn-lg.btn-success.btn-block(type='submit', form='prj') Submit
