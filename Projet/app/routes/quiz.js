@@ -244,7 +244,10 @@ router.post('/newAnswers/:quiz_id', async (req, res) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('answers')
-    const answers = { author: '5ca622b50a14fe182147ffdd', title: req.params.quiz_id, answers: req.body }
+    const result = _.map(req.body, (value, key) => {
+        return { question: key, answers: value }
+    })
+    const answers = { author: '5ca622b50a14fe182147ffdd', title: req.params.quiz_id, answers: result }
     await collection.insertOne(answers)
     client.close()
     console.log(req.body)
@@ -288,5 +291,48 @@ router.post('/new', async (req, res)=>{
     res.redirect('/quiz/manage')
 })
 
+router.get('/result/:quiz_id', async (req, res, next) => {
+    console.log('QCMID ' + req.params.quiz_id)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const q = await collection.findOne({ title: req.params.quiz_id })
+    const collection2 = db.collection('answers')
+    const userAnswers = await collection2.findOne({ title: req.params.quiz_id })
+    client.close()
+    console.log(q)
+    console.log(userAnswers)
+    res.render('result', {
+        chemin: 'Quiz',
+        title: 'Answer',
+        answers: userAnswers.answers,
+        quiz: q,
+        questions: q.questions
+    })
+})
+
+router.get('/list', async (req, res, next) => {
+    console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const arr = await collection.find().toArray()
+    const quizarr = arr.map((qcm, index) => {
+        return qcm
+    })
+    client.close()
+    console.log(quizarr)
+    res.render('viewResults', {
+        chemin: 'Quiz',
+        title: 'Answer',
+        quiz: quizarr
+    })
+})
 
 module.exports = router

@@ -1,0 +1,42 @@
+extends layout
+
+
+block content
+  .col-md-10.offset-md-1
+    .card
+      .card-header
+        strong Quiz: #{quiz.title}           
+      .card-body.card-block   
+        for q in questions
+          .col-md-12
+            label
+              strong Question: #{q.question}
+            .card
+              .card-body.card-block
+                .text-center
+                  table.table
+                    tbody
+                      for userAnswer in answers
+                        if userAnswer.question == q.question
+                          for answer in q.answers
+                            - var find = 0
+                            for ans in userAnswer.answers
+                              if ans == answer
+                                for correctAns in q.correctAnswer
+                                  if ans == correctAns
+                                    - find = 1
+                                    tr
+                                      td.t(style='color:#0AD400') #{answer}
+                                      td 
+                                        input(type='checkbox', value='#{answer}', disabled, checked)
+                                if find == 0
+                                  - find = 1
+                                  tr
+                                    td.t(style='color:red') #{answer}
+                                    td 
+                                      input(type='checkbox', value='#{answer}', disabled, checked)
+                            if find == 0
+                              tr
+                                td.t(style='color:grey') #{answer}
+                                td 
+                                  input(type='checkbox', value='#{answer}', disabled)
