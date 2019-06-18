@@ -52,7 +52,6 @@ router.get('/manage', checkSignIn, async (req, res, next) => {
     })
 })
 
-
 router.get('/manage/:quiz_id', checkSignIn, async (req, res, next) => {
     var ObjectId = require('mongodb').ObjectID;
     const client = await MongoClient.connect(
@@ -385,6 +384,42 @@ router.get('/list', checkSignIn, async (req, res, next) => {
         role: req.session.user.role
     })
 })
+
+
+router.get('/listStudents', checkSignIn, async (req, res, next) => {
+    var usermail = req.session.user.email
+    console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    /*const collection2 = db.collection('groups')
+    const userGrps = await collection2.find({ gestionnaire: usermail }).toArray()
+    const UserGrpsNames = userGrps.map((grp, index) => {
+        return grp.name
+    })*/
+    const collection = db.collection('questionnaires')
+    const arr = await collection.find({ author: usermail}).toArray()
+    const quizarrtitle = arr.map((qcm, index) => {
+        return qcm.title
+    })
+    const collection3 = db.collection('answers')
+    const UserAnswer = await collection3.find({ title: { $in: quizarrtitle }}).toArray()
+    /*const UserAnswersQuiz = UserAnswer.map((ans, index) => {
+        return ans.title
+    })*/
+    //console.log(UserAnswersQuiz)
+    client.close()
+    //console.log(quizarr)
+    res.render('viewStudentsResults', {
+        chemin: 'Quiz',
+        title: 'Results',
+        quiz: UserAnswer,
+        role: req.session.user.role
+    })
+})
+
 router.get('/delete/:quiz_id', checkSignIn, async (req, res, next) => {
     console.log(req.params.quiz_id)
     const client = await MongoClient.connect(
@@ -399,6 +434,7 @@ router.get('/delete/:quiz_id', checkSignIn, async (req, res, next) => {
         title: 'NTM',
     })
 })
+
 function checkSignIn(req, res, next) {
     if (req.session.user) {
         next();     //If session exists, proceed to page

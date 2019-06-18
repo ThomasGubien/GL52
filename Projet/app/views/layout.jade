@@ -64,6 +64,10 @@ html
                 li
                   i.fa.fa-certificate
                   a(href='/quiz/list') Results
+                if role == "adm" || role == "prf"
+                  li
+                    i.fa.fa-certificate
+                    a(href='/quiz/listStudents') Students Results
             h3.menu-title 
             li.menu-item-has-children.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
