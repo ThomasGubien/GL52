@@ -405,14 +405,4 @@ function checkSignIn(req, res, next) {
     }
 }
 
-async function supprQCM(qcmId){
-    const client = await MongoClient.connect(
-        URL,
-        { useNewUrlParser: true }
-    )	
-    const db = client.db('gl52')
-    const collection2 = db.collection('questionnaires')
-    collection2.deleteOne({_id: ObjectID(qcmId)})
-}
-
 module.exports = router
