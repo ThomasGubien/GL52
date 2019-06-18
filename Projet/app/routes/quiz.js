@@ -4,6 +4,7 @@ const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
 const session = require('express-session')
+const ObjectId = require('mongodb').ObjectID
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
@@ -384,7 +385,20 @@ router.get('/list', checkSignIn, async (req, res, next) => {
         role: req.session.user.role
     })
 })
-
+router.get('/delete/:quiz_id', checkSignIn, async (req, res, next) => {
+    console.log(req.params.quiz_id)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )	
+    const db = client.db('gl52')
+    const collection2 = db.collection('questionnaires')
+    collection2.deleteOne({_id: ObjectId(req.params.quiz_id) })
+    res.render('closeitself', {
+        chemin: 'Quiz',
+        title: 'NTM',
+    })
+})
 function checkSignIn(req, res, next) {
     if (req.session.user) {
         next();     //If session exists, proceed to page
