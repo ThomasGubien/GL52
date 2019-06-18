@@ -320,7 +320,21 @@ router.post('/new', checkSignIn, async (req, res) => {
     //else {
         //const grps = { name: qcm.usersgrp, rights: { read: true, write: false } }
     //}
-    const questionnaire = { author: usermail, groups: grps, questions: questions, title: qcm.nomqcm, duration: time }
+    let qcmname = qcm.nomqcm
+    const quizzz = await collection.find().toArray()
+    let numbers = 0
+    const exists = quizzz.map((value, index) => {
+        if (value.title.includes(qcmname, 0)) {
+            numbers ++
+            return value
+        }
+    })
+    console.log(exists)
+    console.log(numbers)
+    if (exists.length != 0) {
+        qcmname = qcmname + "#" + numbers
+    }
+    const questionnaire = { author: usermail, groups: grps, questions: questions, title: qcmname, duration: time }
     await collection.insertOne(questionnaire)
     client.close()
     res.redirect('/quiz/manage')

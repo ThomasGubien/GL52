@@ -7,14 +7,16 @@ block content
         strong New Quiz
       .card-body.card-block
         form(action='/quiz/new', method='POST',id='qcm')
-          label Quiz Name
-          input.form-control(type='text', name='nomqcm', placeholder='Name')
+          label(for='quizname') Quiz Name
+          input.form-control(type='text', name='nomqcm', placeholder='Name', id='quizname', required)
+          .invalid-feedback
+            | Please choose a name for the quiz
           br
           label Quiz Duration
-          input.form-control(type='Number', name='dureeqcm', placeholder='In minutes')
+          input.form-control(type='Number', name='dureeqcm', placeholder='In minutes (0 = Infinte)')
           br
           label Authorized groups
-          select.form-control(name='usersgrp', multiple='multiple') 
+          select.form-control(name='usersgrp', multiple='multiple', required) 
             for g in groups
               option(value='#{g.name}')= g.name
           br
