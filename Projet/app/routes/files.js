@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
+const fs = require('fs')
 var session = require('express-session')
 
 
@@ -62,8 +63,11 @@ router.post('/new', checkSignIn, async (req, res, next) => {
   if (Object.keys(req.files).length == 0) {
     return res.status(400).send('No files were uploaded.');
   }
-  const sampleFile = req.files.myFile;
-  console.log(sampleFile)
+  const sampleFile = req.files.myFile
+  // TEST
+  //const filecontent=fs.readFileSync(sampleFile.data)
+  //console.log(sampleFile.data.toString('utf8'))
+  // TEST END
   const client = await MongoClient.connect(
       URL,
       { useNewUrlParser: true }

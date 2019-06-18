@@ -213,18 +213,18 @@ router.get('/answer', checkSignIn, async (req, res, next) => {
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
-    console.log(UserGrpsNames)
+    //console.log(UserGrpsNames)
     const collection3 = db.collection('answers')
     const UserAnswer = await collection3.find({ author: usermail }).toArray()
     const UserAnswersQuiz = UserAnswer.map((ans, index) => {
         return ans.title
     })
-    console.log(UserAnswersQuiz)
+    //console.log(UserAnswersQuiz)
     const arr = await collection.find({ 'groups.name': { $in: UserGrpsNames } }).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
-    console.log(quizarr)
+    //console.log(quizarr)
     client.close()
     res.render('answerQuiz', {
         chemin: 'Quiz',
@@ -267,10 +267,19 @@ router.post('/newAnswers/:quiz_id', checkSignIn, async (req, res) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('answers')
+    const collection2 = db.collection('questionnaires')
+    console.log(req.params.quiz_id)
+    const questionnaire= await collection2.findOne({title:req.params.quiz_id}) 
+    console.log(questionnaire)
+    let note=0
+    questionnaire.questions.forEach((value,index)=>{
+        const question=value.question
+        if(_.isEqual(req.body[question],value.correctAnswer)) note++
+    })
     const result = _.map(req.body, (value, key) => {
         return { question: key, answers: value }
     })
-    const answers = { author: usermail, title: req.params.quiz_id, answers: result }
+    const answers = { author: usermail, title: req.params.quiz_id, answers: result,note }
     await collection.insertOne(answers)
     client.close()
     console.log(req.body)

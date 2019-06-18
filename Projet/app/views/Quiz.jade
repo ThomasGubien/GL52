@@ -21,11 +21,13 @@ block content
                     table.table
                       tbody
                         if q.answers!=null
+                          - var questIndex=0
                           for a in q.answers
                             tr
                               td #{a}
                               td
-                                input(type='checkbox', name='#{q.question}', value='#{a}')
+                                input(type='checkbox', name='#{q.question}', value='#{questIndex}')
+                                - questIndex++
                         else 
                           tr
                             input(type="text",name='#{q.question}')

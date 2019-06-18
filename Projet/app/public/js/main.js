@@ -1,6 +1,7 @@
 
 $.noConflict();
 let nbclicks=0;
+let tab=new Array(50).fill(0);
 
 jQuery(document).ready(function($) {
 
@@ -40,16 +41,18 @@ jQuery(document).ready(function($) {
 });
 
 function addAnswer(nbC) {
-    console.log('Add Answer clicked')
+		console.log('Add Answer clicked')
+		const numAnswer=tab[nbC]
     const div = document.createElement('div')
 
     div.className = 'answer'
 
     div.innerHTML =
         `<input type="text" name="answer${nbC}" value="" />\
-        <label> <input type="checkbox" name="check${nbC}" value=${nbC} /> Correct Answer? </label>`
+        <label> <input type="checkbox" name="check${nbC}" value=${numAnswer} /> Correct Answer? </label>`
 
-    document.getElementsByClassName('question')[nbC].appendChild(div);
+		document.getElementsByClassName('question')[nbC].appendChild(div);
+		tab[nbC]++
   }   
 
   function addQuestion() {
