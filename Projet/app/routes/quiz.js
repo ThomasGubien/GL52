@@ -341,7 +341,7 @@ router.post('/new', checkSignIn, async (req, res) => {
     console.log(exists)
     console.log(numbers)
     if (exists.length != 0) {
-        qcmname = qcmname + "#" + numbers
+        qcmname = qcmname + "_" + numbers
     }
     const questionnaire = { author: usermail, groups: grps, questions: questions, title: qcmname, duration: time }
     await collection.insertOne(questionnaire)
