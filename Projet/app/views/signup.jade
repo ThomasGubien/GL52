@@ -11,18 +11,18 @@ block content
             form(action='/signup/new', method='POST')
               .form-group
                 label First Name
-                input.form-control(type='firstName', name='firstName', placeholder='First Name')
+                input.form-control(type='firstName', name='firstName', placeholder='First Name', required)
               .form-group
                 label Name
-                input.form-control(type='name', name='name', placeholder='Name')
+                input.form-control(type='name', name='name', placeholder='Name', required)
               .form-group
                 label Email address
-                input.form-control(type='email', name='email', placeholder='Email')
+                input.form-control(type='email', name='email', placeholder='Email', required)
               .form-group
                 label Password
-                input.form-control(type='password', name='pwd', placeholder='Password')
+                input.form-control(type='password', name='pwd', placeholder='Password', required)
               .form-group
                 label Password Confirmation
-                input.form-control(type='password', name='confPwd', placeholder='Password Confirmation')
+                input.form-control(type='password', name='confPwd', placeholder='Password Confirmation', required)
               button.btn.btn-success.btn-flat.m-b-30.m-t-30(type='submit') Register
               

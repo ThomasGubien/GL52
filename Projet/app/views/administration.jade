@@ -44,11 +44,11 @@ block content
               tr
                 form(action='/administration/new', method='POST',id='groupform')
                   td
-                    input.form-control(type='text', name='nomgrp', placeholder='Name')
+                    input.form-control(type='text', name='nomgrp', placeholder='Name', required)
                   td
                     input.form-control(type='text', name='gestionnairegrp', placeholder='#{usermail}', value="#{usermail}", disabled)
                   td
-                    select.form-control(name='usersgrp', multiple='multiple')
+                    select.form-control(name='usersgrp', multiple='multiple',required)
                       for u in users
                         option(value='#{u.email}')= u.email
                   td.t(style='width:15%')
