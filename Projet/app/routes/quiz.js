@@ -196,6 +196,7 @@ router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', checkSignIn, async (
 
 router.get('/answer', checkSignIn, async (req, res, next) => {
     var username = req.session.user.name
+    var usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -209,6 +210,12 @@ router.get('/answer', checkSignIn, async (req, res, next) => {
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
+    const collection3 = db.collection('answers')
+    const UserAnswer = await collection3.find({ author: usermail }).toArray()
+    const UserAnswersQuiz = UserAnswer.map((ans, index) => {
+        return ans.title
+    })
+    console.log(UserAnswersQuiz)
     const arr = await collection.find({ groups: { $in: UserGrpsNames }}).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
@@ -217,7 +224,8 @@ router.get('/answer', checkSignIn, async (req, res, next) => {
     res.render('answerQuiz', {
         chemin: 'Quiz',
         title: 'Answer',
-        quiz: quizarr
+        quiz: quizarr,
+        quizanswered: UserAnswersQuiz
     })
 })
 
@@ -325,6 +333,7 @@ router.get('/result/:quiz_id', checkSignIn, async (req, res, next) => {
 
 router.get('/list', checkSignIn, async (req, res, next) => {
     var username = req.session.user.name
+    var usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -338,7 +347,13 @@ router.get('/list', checkSignIn, async (req, res, next) => {
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
-    const arr = await collection.find({ groups: { $in: UserGrpsNames }}).toArray()
+    const collection3 = db.collection('answers')
+    const UserAnswer = await collection3.find({ author: usermail }).toArray()
+    const UserAnswersQuiz = UserAnswer.map((ans, index) => {
+        return ans.title
+    })
+    console.log(UserAnswersQuiz)
+    const arr = await collection.find({ title: { $in: UserAnswersQuiz } }).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
@@ -346,7 +361,7 @@ router.get('/list', checkSignIn, async (req, res, next) => {
     console.log(quizarr)
     res.render('viewResults', {
         chemin: 'Quiz',
-        title: 'Answer',
+        title: 'Results',
         quiz: quizarr
     })
 })
