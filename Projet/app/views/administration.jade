@@ -48,7 +48,7 @@ block content
                   td
                     input.form-control(type='text', name='gestionnairegrp', placeholder='#{usermail}', value="#{usermail}", disabled)
                   td
-                    select.form-control(name='usersgrp', multiple='multiple',required)
+                    select.form-control(name='usersgrp', multiple='multiple', required)
                       for u in users
                         option(value='#{u.email}')= u.email
                   td.t(style='width:15%')
