@@ -13,7 +13,7 @@ block content
               | Create a new quiz to evaluate skills of your students
             .float-right
               form(action='/quiz/create')
-                button.btn.btn-primary(type='button')
+                button.btn.btn-primary(type='submmit')
                   i.fa.fa-plus
                   |  Go to quiz creation	
       .col-md-4
@@ -25,7 +25,7 @@ block content
               | Challenge your students skills into projects they probably can't do in one semester!
             .float-right
               form(action='/projects/create')
-                button.btn.btn-primary(type='button')
+                button.btn.btn-primary(type='submmit')
                   i.fa.fa-plus
                   |  Go to project creation
       .col-md-4
@@ -36,8 +36,8 @@ block content
             p.card-text
               | Upload files to share your knowledge
             .float-right
-              form(action='/files/upload')
-                button.btn.btn-primary(type='button')
+              form(action='/file/upload')
+                button.btn.btn-primary(type='submmit')
                   i.fa.fa-upload
                   |  Go to file upload
   .col-md-12
@@ -51,7 +51,7 @@ block content
             | Try to resolv quiz make by your favorite (or not) teachers
           .float-right
             form(action='/quiz/answer')
-              button.btn.btn-primary(type='button')
+              button.btn.btn-primary(type='submmit')
                 i.fa.fa-book
                 |  Go to quiz answering	
     .col-md-4
@@ -63,7 +63,7 @@ block content
             | Go spend time and time on impossibles projects
           .float-right
             form(action='/projects/getList')
-              button.btn.btn-primary(type='button')
+              button.btn.btn-primary(type='submmit')
                 i.fa.fa-table
                 |  Go to projects
     .col-md-4
@@ -74,8 +74,8 @@ block content
           p.card-text
             | Download files uploaded by teacher to teach you and to be smarter
           .float-right
-            form(action='/files/downlaod')
-              button.btn.btn-primary(type='button')
+            form(action='/file/download')
+              button.btn.btn-primary(type='submmit')
                 i.fa.fa-download
                 |  Go to file download
   if role == "adm" || role == "prf"
@@ -90,7 +90,7 @@ block content
               | Manage quiz
             .float-right
               form(action='/quiz/manage')
-                button.btn.btn-primary(type='button')
+                button.btn.btn-primary(type='submmit')
                   i.fa.fa-edit
                   |  Go to quiz managment	
       .col-md-4
@@ -101,7 +101,7 @@ block content
             p.card-text
               | Manage groups
             .float-right
-              form(action='/administration/create')
-                button.btn.btn-primary(type='button')
+              form(action='/administration/')
+                button.btn.btn-primary(type='submmit')
                   i.fa.fa-terminal
                   |  Go to groups managment
