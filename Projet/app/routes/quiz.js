@@ -63,15 +63,15 @@ router.get('/manage/:quiz_id', checkSignIn, async (req, res, next) => {
     const allGroups = await grpCollection.find().toArray()
     var affGroupArray = new Array()
     var availableGroupsArray = new Array()
-    var groupsID = new Array()
+    var gro = new Array()
     if (typeof qcm.groups !== 'undefined' && qcm.groups.length > 0) {
         qcm.groups.forEach(element => {
-            groupsID.push(ObjectId(element._id))
+            gro.push(element)
         });
 
         qcm.groups.forEach(element => {
             allGroups.forEach(grp => {
-                if (element.id.toString() == grp._id.toString()) {
+                if (element.name == grp.name) {
                     grp.rights = element.rights
                     affGroupArray.push(grp)
                 }
@@ -99,7 +99,7 @@ router.get('/manage/:quiz_id', checkSignIn, async (req, res, next) => {
     })
 })
 
-router.post('/manage/linkGroup/:quiz_id/:group_id', checkSignIn, async (req, res) => {
+router.post('/manage/linkGroup/:quiz_id/:group_name', checkSignIn, async (req, res) => {
     if (req.params.group_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -121,7 +121,7 @@ router.post('/manage/linkGroup/:quiz_id/:group_id', checkSignIn, async (req, res
 
         const qcmCollection = db.collection('questionnaires')
 
-        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id) }, { $push: { groups: { id: ObjectId(req.params.group_id), rights: { read: read, write: write } } } })
+        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id) }, { $push: { groups: { name: req.params.group_name, rights: { read: read, write: write } } } })
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
@@ -131,7 +131,7 @@ router.post('/manage/linkGroup/:quiz_id/:group_id', checkSignIn, async (req, res
 })
 
 
-router.post('/manage/delinkGroup/:quiz_id/:group_id', checkSignIn, async (req, res) => {
+router.post('/manage/delinkGroup/:quiz_id/:group_name', checkSignIn, async (req, res) => {
     if (req.params.quiz_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -144,7 +144,7 @@ router.post('/manage/delinkGroup/:quiz_id/:group_id', checkSignIn, async (req, r
 
         var selectedGroup
         qcmDocument.groups.forEach(group => {
-            if (req.params.group_id.toString() == group.id.toString()) {
+            if (req.params.group_name == group.name) {
                 selectedGroup = group
             }
         });
@@ -163,7 +163,7 @@ router.post('/manage/delinkGroup/:quiz_id/:group_id', checkSignIn, async (req, r
 })
 
 
-router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', checkSignIn, async (req, res) => {
+router.post('/manage/modifyRightsGroup/:quiz_id/:group_name', checkSignIn, async (req, res) => {
     if (req.params.quiz_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -185,7 +185,7 @@ router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', checkSignIn, async (
             write = true
         }
 
-        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id), "groups.id": ObjectId(req.params.group_id) }, { $set: { "groups.$.rights.read": read, "groups.$.rights.write": write } })
+        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id), "groups.name": req.params.group_name }, { $set: { "groups.$.rights.read": read, "groups.$.rights.write": write } })
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
@@ -302,7 +302,10 @@ router.post('/new', checkSignIn, async (req, res) => {
     } else {
         time = qcm.dureeqcm
     }
-    const questionnaire = { author: usermail, groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
+    const grps = qcm.usersgrp.map((value, index) => {
+        return { name: value, rights: {read: true, write: false}}
+    })
+    const questionnaire = { author: usermail, groups: grps, questions: questions, title: qcm.nomqcm}
     await collection.insertOne(questionnaire)
     client.close()
     res.redirect('/quiz/manage')

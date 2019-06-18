@@ -19,7 +19,7 @@ block content
                   td= q.title
                   td
                     for g in q.groups
-                      a #{g} 
+                      a #{g.name} 
                   td.t(style='width:20%')
                     - var find = 0
                     for ua in quizanswered

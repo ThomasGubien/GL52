@@ -19,7 +19,7 @@ block content
                   td= q.title
                   td.t(style='width:40%')
                     for g in q.groups                      
-                      a= g
+                      a #{g.name}
                   td.t(style='width:30%')
                     button.btn.btn-warning.btn-sm(type='modify')
                       i.fa.fa-pencil
