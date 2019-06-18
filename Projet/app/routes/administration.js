@@ -41,7 +41,7 @@ router.post('/new', checkSignIn, async (req, res) => {
     const collection = db.collection('groups')
     let grp = req.body
     //console.log(grp)
-    const groupe = { name: grp.nomgrp, gestionnaire: grp.gestionnairegrp, users: grp.usersgrp }
+    const groupe = { name: grp.nomgrp, gestionnaire: req.session.user.email, users: grp.usersgrp }
     await collection.insertOne(groupe)
     //console.log(groupe)
     client.close()
