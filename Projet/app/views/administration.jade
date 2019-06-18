@@ -56,3 +56,14 @@ block content
                       i.fa.fa-check
                     button.btn.btn-danger.btn-sm(type='reset', form='groupform')
                       i.fa.fa-times
+  .col-md-4
+    .card
+      .card-header
+        strong Account Creation (by .csv)
+      .card-body.card-block
+        .text-center
+          form(action='/administration/accountCreation', method='POST', enctype='multipart/form-data', id='fileUp')
+            input(type="file", id="avatar", name="myFile")
+            br
+            br
+        button.btn.btn-success.btn-lg.btn-block(type='submit', form='fileUp') Upload
