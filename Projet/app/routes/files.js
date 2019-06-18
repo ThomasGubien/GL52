@@ -24,21 +24,22 @@ router.get('/upload', checkSignIn, async (req, res, next) => {
     res.render('uploadFile', {
         chemin: 'Files',
         title: 'Upload a file',
-        groups: grpsarr
+        groups: grpsarr,
+        role: req.session.user.role
     })
 })
 
 router.get('/download', checkSignIn, async (req, res, next) => {
-    var username = req.session.user.name
+    var usermail = req.session.user.email
     const client = await MongoClient.connect(
         URL,
         { useNewUrlParser: true }
     )
     const db = client.db('gl52')
     const collection = db.collection('files')
-    const userinfo = await collection.findOne({ name: username })
+    const userinfo = await collection.findOne({ email: usermail })
     const collection2 = db.collection('groups')
-    const userGrps = await collection2.find({ users: username }).toArray()
+    const userGrps = await collection2.find({ users: usermail }).toArray()
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
@@ -51,7 +52,8 @@ router.get('/download', checkSignIn, async (req, res, next) => {
     res.render('downloadFile', {
         chemin: 'Files',
         title: 'Download',
-        files: filesarr
+        files: filesarr,
+        role: req.session.user.role
     })
 })
 

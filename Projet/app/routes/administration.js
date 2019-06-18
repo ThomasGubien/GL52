@@ -17,22 +17,18 @@ router.get('/', checkSignIn, async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('users')
-    const arr = await collection.find().toArray()
-    const usersarr = arr.map((qcm, index) => {
-        return qcm
-    })
+    const usersarr = await collection.find().toArray()
     const collection2 = db.collection('groups')
-    const arr2 = await collection2.find().toArray()
-    const grpsarr = arr2.map((qcm, index) => {
-        return qcm
-    })
+    const grpsarr = await collection2.find().toArray()
     client.close()
     //console.log(usersarr)
     res.render('administration', {
         chemin: 'Settings',
         title: 'Administration',
         users: usersarr,
-        groups: grpsarr
+        groups: grpsarr,
+        role: req.session.user.role,
+        usermail: req.session.user.email
     });
 });
 

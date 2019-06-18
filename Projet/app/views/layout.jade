@@ -1,6 +1,6 @@
 doctype html
 html
- head
+  head
     title= title
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/bootstrap.min.css')
@@ -54,9 +54,10 @@ html
                 li
                   i.fa.fa-plus
                   a(href='/quiz/create') Create
-                li
-                  i.fa.fa-edit
-                  a(href='/quiz/manage') Manage
+                if role == "adm" || role == "prf"
+                  li
+                    i.fa.fa-edit
+                    a(href='/quiz/manage') Manage
                 li
                   i.fa.fa-book
                   a(href='/quiz/answer') Answer
@@ -98,9 +99,10 @@ html
                 li
                   i.menu-icon.fa.fa-user
                   a(href='/user') Profil
-                li
-                  i.menu-icon.fa.fa-terminal
-                  a(href='/Administration') Administration
+                if role == "adm"
+                  li
+                    i.menu-icon.fa.fa-terminal
+                    a(href='/Administration') Administration
         // /.navbar-collapse
     // /#left-panel
     // Left Panel
@@ -113,14 +115,14 @@ html
             a#menuToggle.menutoggle.pull-left
               i.fa.fa.fa-tasks
             .header-left
-              button.search-trigger
+              //button.search-trigger
                 i.fa.fa-search
-              .form-inline
+              //.form-inline
                 form.search-form
                   input.form-control.mr-sm-2(type='text', placeholder='Search ...', aria-label='Search')
                   button.search-close(type='submit')
                     i.fa.fa-close
-              .dropdown.for-notification
+              //.dropdown.for-notification
                 button#notification.btn.btn-secondary.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                   i.fa.fa-bell
                   span.count.bg-danger 5
@@ -135,7 +137,7 @@ html
                   a.dropdown-item.media.bg-flat-color-5(href='#')
                     i.fa.fa-warning
                     p Server #3 overloaded.
-              .dropdown.for-message
+              //.dropdown.for-message
                 button#message.btn.btn-secondary.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                   i.ti-email
                   span.count.bg-primary 9
@@ -177,17 +179,17 @@ html
                 a.nav-link(href='/user')
                   i.fa.fa-.user
                   | My Profile
-                a.nav-link(href='#')
+                //a.nav-link(href='#')
                   i.fa.fa-.user
                   | Notifications 
                   span.count 13
-                a.nav-link(href='#')
+                //a.nav-link(href='#')
                   i.fa.fa.-cog
                   | Settings
                 a.nav-link(href='#')
                   i.fa.fa-power.-off
                   | Logout
-            #language-select.language-select.dropdown
+            //#language-select.language-select.dropdown
               a#language.dropdown-toggle(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
                 i.flag-icon.flag-icon-us
               .dropdown-menu(aria-labelledby='language')

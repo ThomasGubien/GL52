@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  .col-md-6
+  .col-md-4
     .card
       .card-header
         strong Users List
@@ -19,7 +19,7 @@ block content
                   td= u.firstName
                   td= u.name
                   td= u.email
-  .col-md-6
+  .col-md-8
     .card
       .card-header
         strong Groups List
@@ -37,7 +37,7 @@ block content
                 tr(id='groupList')
                   td= g.name
                   td= g.gestionnaire
-                  td
+                  td.t(style='width:40%') #{g.users}
                   td
                     button.btn.btn-danger.btn-sm(type='take')
                       i.fa.fa-trash
@@ -46,15 +46,12 @@ block content
                   td
                     input.form-control(type='text', name='nomgrp', placeholder='Name')
                   td
-                    select.form-control(name='gestionnairegrp')
-                      option(value="") Manager Name
-                      for u in users
-                        option(value='#{u.name}')= u.name
+                    input.form-control(type='text', name='gestionnairegrp', placeholder='#{usermail}', value="#{usermail}", disabled)
                   td
                     select.form-control(name='usersgrp', multiple='multiple')
                       for u in users
-                        option(value='#{u.name}')= u.name
-                  td.t(style='width:20%')
+                        option(value='#{u.email}')= u.email
+                  td.t(style='width:15%')
                     button.btn.btn-success.btn-sm(type='submit', form='groupform').t(style="margin-right:5px")
                       i.fa.fa-check
                     button.btn.btn-danger.btn-sm(type='reset', form='groupform')

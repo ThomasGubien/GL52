@@ -23,7 +23,8 @@ router.get('/create', checkSignIn, async  (req, res, next) =>{
     res.render('createQuiz', {
         chemin: 'Quiz',
         title: 'Create',
-        groups: grpsarr
+        groups: grpsarr,
+        role: req.session.user.role
     })
 })
 
@@ -45,7 +46,8 @@ router.get('/manage', checkSignIn, async (req, res, next) => {
     res.render('manageQuiz', {
         chemin: 'Quiz',
         title: 'Manage',
-        quiz: arr
+        quiz: arr,
+        role: req.session.user.role
     })
 })
 
@@ -96,7 +98,8 @@ router.get('/manage/:quiz_id', checkSignIn, async (req, res, next) => {
         title: 'Gestion des Groupes',
         quiz: qcm,
         affectedGroup: affGroupArray,
-        availableGroups: availableGroupsArray
+        availableGroups: availableGroupsArray,
+        role: req.session.user.role
     })
 })
 
@@ -196,7 +199,6 @@ router.post('/manage/modifyRightsGroup/:quiz_id/:group_name', checkSignIn, async
 })
 
 router.get('/answer', checkSignIn, async (req, res, next) => {
-    var username = req.session.user.name
     var usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
@@ -205,9 +207,9 @@ router.get('/answer', checkSignIn, async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const userinfo = await collection.findOne({ name: username })
+    const userinfo = await collection.findOne({ email: usermail })
     const collection2 = db.collection('groups')
-    const userGrps = await collection2.find({ users: username }).toArray()
+    const userGrps = await collection2.find({ users: usermail }).toArray()
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
@@ -228,7 +230,8 @@ router.get('/answer', checkSignIn, async (req, res, next) => {
         chemin: 'Quiz',
         title: 'Answer',
         quiz: quizarr,
-        quizanswered: UserAnswersQuiz
+        quizanswered: UserAnswersQuiz,
+        role: req.session.user.role
     })
 })
 
@@ -251,7 +254,8 @@ router.get('/startQuiz/:quiz_id', checkSignIn, async (req, res, next) => {
         quiz: q,
         minutes: minu,
         seconds: secd,
-        questions: q.questions
+        questions: q.questions,
+        role: req.session.user.role
     })
 })
 
@@ -341,12 +345,12 @@ router.get('/result/:quiz_id', checkSignIn, async (req, res, next) => {
         title: 'Answer',
         answers: userAnswers.answers,
         quiz: q,
-        questions: q.questions
+        questions: q.questions,
+        role: req.session.user.role
     })
 })
 
 router.get('/list', checkSignIn, async (req, res, next) => {
-    var username = req.session.user.name
     var usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
@@ -355,9 +359,9 @@ router.get('/list', checkSignIn, async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const userinfo = await collection.findOne({ name: username })
+    const userinfo = await collection.findOne({ email: usermail })
     const collection2 = db.collection('groups')
-    const userGrps = await collection2.find({ users: username }).toArray()
+    const userGrps = await collection2.find({ users: usermail }).toArray()
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
@@ -376,7 +380,8 @@ router.get('/list', checkSignIn, async (req, res, next) => {
     res.render('viewResults', {
         chemin: 'Quiz',
         title: 'Results',
-        quiz: quizarr
+        quiz: quizarr,
+        role: req.session.user.role
     })
 })
 

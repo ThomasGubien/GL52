@@ -8,7 +8,7 @@ var session = require('express-session')
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
 router.get('/getList', checkSignIn, async (req, res, next) => {
-    var username = req.session.user.name
+    var usermail = req.session.user.email
 	console.log('QCMID ' + req.query.qcmID)
 	const client = await MongoClient.connect(
         URL,
@@ -16,9 +16,9 @@ router.get('/getList', checkSignIn, async (req, res, next) => {
     )
 	const db = client.db('gl52')
 	const collection = db.collection('projects')
-    const userinfo = await collection.findOne({ name: username })
+    const userinfo = await collection.findOne({ email: usermail })
     const collection2 = db.collection('groups')
-    const userGrps = await collection2.find({ users: username }).toArray()
+    const userGrps = await collection2.find({ users: usermail }).toArray()
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
@@ -31,7 +31,8 @@ router.get('/getList', checkSignIn, async (req, res, next) => {
     res.render('projectsList', {
 		chemin: 'Projects',
 		title: 'List',
-		projects: fullarr
+        projects: fullarr,
+        role: req.session.user.role
 	})
 })
 
@@ -51,7 +52,8 @@ router.get('/create', checkSignIn, async (req, res, next) => {
     res.render('createProject', {
         chemin: 'Projects',
         title: 'Create',
-        groups: grpsarr
+        groups: grpsarr,
+        role: req.session.user.role
     })
 })
 
@@ -89,7 +91,8 @@ router.get('/getProject/:prj_id', checkSignIn, async (req, res, next) => {
         chemin: 'Projects',
         title: 'View',
         project: p,
-        files: arr
+        files: arr,
+        role: req.session.user.role
     })
 })
 

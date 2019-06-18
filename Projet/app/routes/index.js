@@ -5,7 +5,8 @@ var session = require('express-session')
 /* GET home page. */
 router.get('/', checkSignIn, function(req, res, next) {
     res.render('index', {
-        title: 'Dashboard'
+        title: 'Dashboard',
+        role: req.session.user.role
     });
 });
 
