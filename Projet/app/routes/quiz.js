@@ -359,7 +359,7 @@ router.get('/result/:quiz_id', checkSignIn, async (req, res, next) => {
     const collection = db.collection('questionnaires')
     const q = await collection.findOne({ title: req.params.quiz_id })
     const collection2 = db.collection('answers')
-    const userAnswers = await collection2.findOne({ title: req.params.quiz_id })
+    const userAnswers = await collection2.findOne({ title: req.params.quiz_id, author: req.session.user.email })
     client.close()
     console.log(q)
     console.log(userAnswers)
