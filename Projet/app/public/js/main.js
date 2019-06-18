@@ -1,3 +1,4 @@
+
 $.noConflict();
 let nbclicks=0;
 
@@ -64,4 +65,5 @@ function addAnswer(nbC) {
 
 	document.getElementById('qcm').appendChild(div);
 	nbclicks++
-  }  
+	}  
+
