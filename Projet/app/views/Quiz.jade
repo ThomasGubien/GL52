@@ -9,7 +9,7 @@ block content
           strong Quiz: #{quiz.title}           
         .card-body.card-block
           .t(style='font-style: italic; text-align:right')
-            //label Temps écoulé:
+            //label Temps ï¿½coulï¿½:
             .timeElapsed           
           for q in questions
             .col-md-12
@@ -20,11 +20,15 @@ block content
                   .text-center
                     table.table
                       tbody
-                        for a in q.answers
+                        if q.answers!=null
+                          for a in q.answers
+                            tr
+                              td #{a}
+                              td
+                                input(type='checkbox', name='#{q.question}', value='#{a}')
+                        else 
                           tr
-                            td #{a}
-                            td
-                              input(type='checkbox', name='#{q.question}', value='#{a}')
+                            input(type="text",name='#{q.question}')
         .card-footer
           .text-center
             button.btn.btn-lg.btn-info.btn-block(type='submit') Submit
@@ -44,7 +48,7 @@ block content
                     timeElem.innerHTML = "Time elapsed: " + min + 'min' + ' ' + sec + 's' + " / #{minutes}min #{seconds}s "
                   },1000)
                 setTimeout(() =>{
-                  alert("Temps écoulé")       
+                  alert("Temps ï¿½coulï¿½")       
                   window.location = '/quiz/answer'
                 },"#{quiz.duration}"*60*1000)  
               }

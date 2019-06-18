@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
-var session = require('express-session')
+const session = require('express-session')
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
@@ -28,6 +28,7 @@ router.get('/create', checkSignIn, async  (req, res, next) =>{
 })
 
 router.get('/manage', checkSignIn, async (req, res, next) => {
+    const usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -35,16 +36,16 @@ router.get('/manage', checkSignIn, async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const arr = await collection.find().toArray()
-    const fullarr = arr.map((qcm, index) => {
+    const arr = await collection.find({author:usermail}).toArray()
+    /*const fullarr = arr.map((qcm, index) => {
         return qcm
-    })
+    })*/
     client.close()
-    console.log(fullarr)
+    console.log(arr)
     res.render('manageQuiz', {
         chemin: 'Quiz',
         title: 'Manage',
-        quiz: fullarr
+        quiz: arr
     })
 })
 

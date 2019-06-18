@@ -30,10 +30,11 @@ router.post('/log',async function (req, res) {
         res.redirect('/')
     }
     else{
-        res.send({
+        /* res.send({
             'code':204,
             'success':'Wrong Credentials'
-        })
+        })*/
+        res.redirect('/')
     }
 });
 

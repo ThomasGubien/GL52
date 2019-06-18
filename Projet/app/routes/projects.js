@@ -80,16 +80,16 @@ router.get('/getProject/:prj_id', checkSignIn, async (req, res, next) => {
     const p = await collection.findOne({ title: req.params.prj_id })
     const collection2 = db.collection('files')
     const arr = await collection2.find().toArray()
-    const filesarr = arr.map((qcm, index) => {
-        return qcm
-    })
+    // const filesarr = arr.map((qcm, index) => {
+    //    return qcm
+    // })
     client.close()
     console.log(p)
     res.render('project', {
         chemin: 'Projects',
         title: 'View',
         project: p,
-        files: filesarr
+        files: arr
     })
 })
 
