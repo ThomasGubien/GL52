@@ -3,7 +3,7 @@ var router = express.Router();
 var URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 var mysql = require('mysql');
 const MongoClient = require('mongodb')
-
+var sha256 = require('js-sha256')
 
 router.get('/', function (req, res, next) {
     res.render('login', {
@@ -23,8 +23,9 @@ router.post('/log',async function (req, res) {
     client.close()
     console.log(user)
     console.log(user.password)
-    console.log(infos.pwd)
-    if (user.password == infos.pwd) {
+    let hash = sha256(infos.pwd)
+    console.log(hash)
+    if (user.password == hash) {
         req.session.user = user
         res.redirect('/')
     }
