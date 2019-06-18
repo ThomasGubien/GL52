@@ -21,6 +21,6 @@ block content
                   td= q.author
                   td= q.note
                   td.t(style='width:20%')
-                    form(action='/quiz/result/#{q.title}')
+                    form(action='/quiz/result/#{q.title}/#{q.author}')
                       button.btn.btn-primary.btn-sm(type='result').t(style='width:100%')
                         a View result

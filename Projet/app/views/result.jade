@@ -7,6 +7,8 @@ block content
       .card-header
         strong Quiz: #{quiz.title}           
       .card-body.card-block   
+        .t(style='font-style: italic; text-align:right')
+          | Note: #{note}
         for q in questions
           .col-md-12
             label

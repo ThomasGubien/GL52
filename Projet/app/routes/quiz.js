@@ -369,9 +369,37 @@ router.get('/result/:quiz_id', checkSignIn, async (req, res, next) => {
         answers: userAnswers.answers,
         quiz: q,
         questions: q.questions,
-        role: req.session.user.role
+        role: req.session.user.role,
+        note: userAnswers.note
     })
 })
+
+
+router.get('/result/:quiz_id/:user_mail', checkSignIn, async (req, res, next) => {
+    console.log('QCMID ' + req.params.quiz_id)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const q = await collection.findOne({ title: req.params.quiz_id })
+    const collection2 = db.collection('answers')
+    const userAnswers = await collection2.findOne({ title: req.params.quiz_id, author: req.params.user_mail })
+    client.close()
+    console.log(q)
+    console.log(userAnswers)
+    res.render('result', {
+        chemin: 'Quiz',
+        title: 'Answer',
+        answers: userAnswers.answers,
+        quiz: q,
+        questions: q.questions,
+        role: req.session.user.role,
+        note: userAnswers.note
+    })
+})
+
 
 router.get('/list', checkSignIn, async (req, res, next) => {
     var usermail = req.session.user.email
