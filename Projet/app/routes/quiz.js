@@ -210,16 +210,18 @@ router.get('/answer', checkSignIn, async (req, res, next) => {
     const UserGrpsNames = userGrps.map((grp, index) => {
         return grp.name
     })
+    console.log(UserGrpsNames)
     const collection3 = db.collection('answers')
     const UserAnswer = await collection3.find({ author: usermail }).toArray()
     const UserAnswersQuiz = UserAnswer.map((ans, index) => {
         return ans.title
     })
     console.log(UserAnswersQuiz)
-    const arr = await collection.find({ groups: { $in: UserGrpsNames }}).toArray()
+    const arr = await collection.find({ 'groups.name': { $in: UserGrpsNames } }).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
+    console.log(quizarr)
     client.close()
     res.render('answerQuiz', {
         chemin: 'Quiz',
@@ -302,10 +304,18 @@ router.post('/new', checkSignIn, async (req, res) => {
     } else {
         time = qcm.dureeqcm
     }
+    if (typeof (qcm.usersgrp) === 'string') {
+        qcm.usersgrp = [qcm.usersgrp]
+    }
+    //if (qcm.usersgrp.length > 1) {
     const grps = qcm.usersgrp.map((value, index) => {
-        return { name: value, rights: {read: true, write: false}}
+        return { name: value, rights: { read: true, write: false } }
     })
-    const questionnaire = { author: usermail, groups: grps, questions: questions, title: qcm.nomqcm}
+    //}
+    //else {
+        //const grps = { name: qcm.usersgrp, rights: { read: true, write: false } }
+    //}
+    const questionnaire = { author: usermail, groups: grps, questions: questions, title: qcm.nomqcm, duration: time }
     await collection.insertOne(questionnaire)
     client.close()
     res.redirect('/quiz/manage')

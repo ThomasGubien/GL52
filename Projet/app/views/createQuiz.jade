@@ -10,6 +10,9 @@ block content
           label Quiz Name
           input.form-control(type='text', name='nomqcm', placeholder='Name')
           br
+          label Quiz Duration
+          input.form-control(type='Number', name='dureeqcm', placeholder='In minutes')
+          br
           label Authorized groups
           select.form-control(name='usersgrp', multiple='multiple') 
             for g in groups
