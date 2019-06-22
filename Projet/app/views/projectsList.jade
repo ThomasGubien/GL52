@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  .col-md-8.offset-md-2
+  .col-md-10.offset-md-1
     .card
       .card-header
         strong Quiz List
@@ -12,6 +12,7 @@ block content
               tr
                 th(scope='col') Title
                 th(scope='col') Groups
+                th(scope='col') Description
                 th(scope='col') Action
             tbody
               for p in projects
@@ -20,6 +21,7 @@ block content
                   td
                     for g in p.groups
                       a #{g} 
+                  td= p.description
                   td.t(style='width:20%')
                     form(action='/projects/getProject/#{p.title}')
                       button.btn.btn-primary.btn-sm(type='submit').t(style='width:100%')

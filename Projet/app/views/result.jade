@@ -7,6 +7,8 @@ block content
       .card-header
         strong Quiz: #{quiz.title}           
       .card-body.card-block   
+        .t(style='font-style: italic; text-align:right')
+          | Note: #{note}
         for q in questions
           .col-md-12
             label
@@ -18,10 +20,10 @@ block content
                     tbody
                       for userAnswer in answers
                         if userAnswer.question == q.question
-                          for answer in q.answers
+                          each answer, index in q.answers
                             - var find = 0
                             for ans in userAnswer.answers
-                              if ans == answer
+                              if ans == index
                                 for correctAns in q.correctAnswer
                                   if ans == correctAns
                                     - find = 1

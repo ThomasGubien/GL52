@@ -3,10 +3,12 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
+const session = require('express-session')
+const ObjectId = require('mongodb').ObjectID
 
 const  URL= 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
-router.get('/create', async  (req, res, next) =>{
+router.get('/create', checkSignIn, async  (req, res, next) =>{
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -22,11 +24,13 @@ router.get('/create', async  (req, res, next) =>{
     res.render('createQuiz', {
         chemin: 'Quiz',
         title: 'Create',
-        groups: grpsarr
+        groups: grpsarr,
+        role: req.session.user.role
     })
 })
 
-router.get('/manage', async (req, res, next) => {
+router.get('/manage', checkSignIn, async (req, res, next) => {
+    const usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -34,21 +38,21 @@ router.get('/manage', async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const arr = await collection.find().toArray()
-    const fullarr = arr.map((qcm, index) => {
+    const arr = await collection.find({author:usermail}).toArray()
+    /*const fullarr = arr.map((qcm, index) => {
         return qcm
-    })
+    })*/
     client.close()
-    console.log(fullarr)
+    console.log(arr)
     res.render('manageQuiz', {
         chemin: 'Quiz',
         title: 'Manage',
-        quiz: fullarr
+        quiz: arr,
+        role: req.session.user.role
     })
 })
 
-
-router.get('/manage/:quiz_id', async (req, res, next) => {
+router.get('/manage/:quiz_id', checkSignIn, async (req, res, next) => {
     var ObjectId = require('mongodb').ObjectID;
     const client = await MongoClient.connect(
         URL,
@@ -62,15 +66,15 @@ router.get('/manage/:quiz_id', async (req, res, next) => {
     const allGroups = await grpCollection.find().toArray()
     var affGroupArray = new Array()
     var availableGroupsArray = new Array()
-    var groupsID = new Array()
+    var gro = new Array()
     if (typeof qcm.groups !== 'undefined' && qcm.groups.length > 0) {
         qcm.groups.forEach(element => {
-            groupsID.push(ObjectId(element._id))
+            gro.push(element)
         });
 
         qcm.groups.forEach(element => {
             allGroups.forEach(grp => {
-                if (element.id.toString() == grp._id.toString()) {
+                if (element.name == grp.name) {
                     grp.rights = element.rights
                     affGroupArray.push(grp)
                 }
@@ -94,11 +98,12 @@ router.get('/manage/:quiz_id', async (req, res, next) => {
         title: 'Gestion des Groupes',
         quiz: qcm,
         affectedGroup: affGroupArray,
-        availableGroups: availableGroupsArray
+        availableGroups: availableGroupsArray,
+        role: req.session.user.role
     })
 })
 
-router.post('/manage/linkGroup/:quiz_id/:group_id', async (req, res) => {
+router.post('/manage/linkGroup/:quiz_id/:group_name', checkSignIn, async (req, res) => {
     if (req.params.group_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -120,7 +125,7 @@ router.post('/manage/linkGroup/:quiz_id/:group_id', async (req, res) => {
 
         const qcmCollection = db.collection('questionnaires')
 
-        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id) }, { $push: { groups: { id: ObjectId(req.params.group_id), rights: { read: read, write: write } } } })
+        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id) }, { $push: { groups: { name: req.params.group_name, rights: { read: read, write: write } } } })
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
@@ -130,7 +135,7 @@ router.post('/manage/linkGroup/:quiz_id/:group_id', async (req, res) => {
 })
 
 
-router.post('/manage/delinkGroup/:quiz_id/:group_id', async (req, res) => {
+router.post('/manage/delinkGroup/:quiz_id/:group_name', checkSignIn, async (req, res) => {
     if (req.params.quiz_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -143,7 +148,7 @@ router.post('/manage/delinkGroup/:quiz_id/:group_id', async (req, res) => {
 
         var selectedGroup
         qcmDocument.groups.forEach(group => {
-            if (req.params.group_id.toString() == group.id.toString()) {
+            if (req.params.group_name == group.name) {
                 selectedGroup = group
             }
         });
@@ -162,7 +167,7 @@ router.post('/manage/delinkGroup/:quiz_id/:group_id', async (req, res) => {
 })
 
 
-router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', async (req, res) => {
+router.post('/manage/modifyRightsGroup/:quiz_id/:group_name', checkSignIn, async (req, res) => {
     if (req.params.quiz_id !== null) {
         var ObjectId = require('mongodb').ObjectID;
         const client = await MongoClient.connect(
@@ -184,7 +189,7 @@ router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', async (req, res) => 
             write = true
         }
 
-        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id), "groups.id": ObjectId(req.params.group_id) }, { $set: { "groups.$.rights.read": read, "groups.$.rights.write": write } })
+        qcmCollection.updateOne({ _id: ObjectId(req.params.quiz_id), "groups.name": req.params.group_name }, { $set: { "groups.$.rights.read": read, "groups.$.rights.write": write } })
 
         //Debug
         //const debugQcmDocument = await qcmCollection.find({_id: ObjectId(quid)}).toArray()
@@ -193,7 +198,8 @@ router.post('/manage/modifyRightsGroup/:quiz_id/:group_id', async (req, res) => 
     }
 })
 
-router.get('/answer', async (req, res, next) => {
+router.get('/answer', checkSignIn, async (req, res, next) => {
+    var usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -201,20 +207,35 @@ router.get('/answer', async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const arr = await collection.find().toArray()
+    const userinfo = await collection.findOne({ email: usermail })
+    const collection2 = db.collection('groups')
+    const userGrps = await collection2.find({ users: usermail }).toArray()
+    const UserGrpsNames = userGrps.map((grp, index) => {
+        return grp.name
+    })
+    //console.log(UserGrpsNames)
+    const collection3 = db.collection('answers')
+    const UserAnswer = await collection3.find({ author: usermail }).toArray()
+    const UserAnswersQuiz = UserAnswer.map((ans, index) => {
+        return ans.title
+    })
+    //console.log(UserAnswersQuiz)
+    const arr = await collection.find({ 'groups.name': { $in: UserGrpsNames } }).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
+    //console.log(quizarr)
     client.close()
-    console.log(quizarr)
     res.render('answerQuiz', {
         chemin: 'Quiz',
         title: 'Answer',
-        quiz: quizarr
+        quiz: quizarr,
+        quizanswered: UserAnswersQuiz,
+        role: req.session.user.role
     })
 })
 
-router.get('/startQuiz/:quiz_id', async (req, res, next) => {
+router.get('/startQuiz/:quiz_id', checkSignIn, async (req, res, next) => {
     console.log('QCMID ' + req.params.quiz_id)
     const client = await MongoClient.connect(
         URL,
@@ -233,28 +254,40 @@ router.get('/startQuiz/:quiz_id', async (req, res, next) => {
         quiz: q,
         minutes: minu,
         seconds: secd,
-        questions: q.questions
+        questions: q.questions,
+        role: req.session.user.role
     })
 })
 
-router.post('/newAnswers/:quiz_id', async (req, res) => {
+router.post('/newAnswers/:quiz_id', checkSignIn, async (req, res) => {
+    var usermail = req.session.user.email
     const client = await MongoClient.connect(
         URL,
         { useNewUrlParser: true }
     )
     const db = client.db('gl52')
     const collection = db.collection('answers')
+    const collection2 = db.collection('questionnaires')
+    console.log(req.params.quiz_id)
+    const questionnaire= await collection2.findOne({title:req.params.quiz_id}) 
+    console.log(questionnaire)
+    let note=0
+    questionnaire.questions.forEach((value,index)=>{
+        const question=value.question
+        if(_.isEqual(req.body[question],value.correctAnswer)) note++
+    })
     const result = _.map(req.body, (value, key) => {
         return { question: key, answers: value }
     })
-    const answers = { author: '5ca622b50a14fe182147ffdd', title: req.params.quiz_id, answers: result }
+    const answers = { author: usermail, title: req.params.quiz_id, answers: result,note }
     await collection.insertOne(answers)
     client.close()
     console.log(req.body)
     res.redirect('/quiz/answer')
 })
 
-router.post('/new', async (req, res)=>{
+router.post('/new', checkSignIn, async (req, res) => {
+    var usermail = req.session.user.email
     const client = await MongoClient.connect(
         URL,
         { useNewUrlParser: true }
@@ -285,13 +318,38 @@ router.post('/new', async (req, res)=>{
     } else {
         time = qcm.dureeqcm
     }
-    const questionnaire = { author: '5ca622b50a14fe182147ffdd', groups: [qcm.usersgrp], questions: questions, title: qcm.nomqcm}
+    if (typeof (qcm.usersgrp) === 'string') {
+        qcm.usersgrp = [qcm.usersgrp]
+    }
+    //if (qcm.usersgrp.length > 1) {
+    const grps = qcm.usersgrp.map((value, index) => {
+        return { name: value, rights: { read: true, write: false } }
+    })
+    //}
+    //else {
+        //const grps = { name: qcm.usersgrp, rights: { read: true, write: false } }
+    //}
+    let qcmname = qcm.nomqcm
+    const quizzz = await collection.find().toArray()
+    let numbers = 0
+    const exists = quizzz.map((value, index) => {
+        if (value.title.includes(qcmname, 0)) {
+            numbers ++
+            return value
+        }
+    })
+    console.log(exists)
+    console.log(numbers)
+    if (exists.length != 0) {
+        qcmname = qcmname + "_" + numbers
+    }
+    const questionnaire = { author: usermail, groups: grps, questions: questions, title: qcmname, duration: time }
     await collection.insertOne(questionnaire)
     client.close()
     res.redirect('/quiz/manage')
 })
 
-router.get('/result/:quiz_id', async (req, res, next) => {
+router.get('/result/:quiz_id', checkSignIn, async (req, res, next) => {
     console.log('QCMID ' + req.params.quiz_id)
     const client = await MongoClient.connect(
         URL,
@@ -301,7 +359,7 @@ router.get('/result/:quiz_id', async (req, res, next) => {
     const collection = db.collection('questionnaires')
     const q = await collection.findOne({ title: req.params.quiz_id })
     const collection2 = db.collection('answers')
-    const userAnswers = await collection2.findOne({ title: req.params.quiz_id })
+    const userAnswers = await collection2.findOne({ title: req.params.quiz_id, author: req.session.user.email })
     client.close()
     console.log(q)
     console.log(userAnswers)
@@ -310,11 +368,41 @@ router.get('/result/:quiz_id', async (req, res, next) => {
         title: 'Answer',
         answers: userAnswers.answers,
         quiz: q,
-        questions: q.questions
+        questions: q.questions,
+        role: req.session.user.role,
+        note: userAnswers.note
     })
 })
 
-router.get('/list', async (req, res, next) => {
+
+router.get('/result/:quiz_id/:user_mail', checkSignIn, async (req, res, next) => {
+    console.log('QCMID ' + req.params.quiz_id)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    const collection = db.collection('questionnaires')
+    const q = await collection.findOne({ title: req.params.quiz_id })
+    const collection2 = db.collection('answers')
+    const userAnswers = await collection2.findOne({ title: req.params.quiz_id, author: req.params.user_mail })
+    client.close()
+    console.log(q)
+    console.log(userAnswers)
+    res.render('result', {
+        chemin: 'Quiz',
+        title: 'Answer',
+        answers: userAnswers.answers,
+        quiz: q,
+        questions: q.questions,
+        role: req.session.user.role,
+        note: userAnswers.note
+    })
+})
+
+
+router.get('/list', checkSignIn, async (req, res, next) => {
+    var usermail = req.session.user.email
     console.log('QCMID ' + req.query.qcmID)
     const client = await MongoClient.connect(
         URL,
@@ -322,7 +410,19 @@ router.get('/list', async (req, res, next) => {
     )
     const db = client.db('gl52')
     const collection = db.collection('questionnaires')
-    const arr = await collection.find().toArray()
+    const userinfo = await collection.findOne({ email: usermail })
+    const collection2 = db.collection('groups')
+    const userGrps = await collection2.find({ users: usermail }).toArray()
+    const UserGrpsNames = userGrps.map((grp, index) => {
+        return grp.name
+    })
+    const collection3 = db.collection('answers')
+    const UserAnswer = await collection3.find({ author: usermail }).toArray()
+    const UserAnswersQuiz = UserAnswer.map((ans, index) => {
+        return ans.title
+    })
+    console.log(UserAnswersQuiz)
+    const arr = await collection.find({ title: { $in: UserAnswersQuiz } }).toArray()
     const quizarr = arr.map((qcm, index) => {
         return qcm
     })
@@ -330,9 +430,71 @@ router.get('/list', async (req, res, next) => {
     console.log(quizarr)
     res.render('viewResults', {
         chemin: 'Quiz',
-        title: 'Answer',
-        quiz: quizarr
+        title: 'Results',
+        quiz: quizarr,
+        role: req.session.user.role
     })
 })
+
+
+router.get('/listStudents', checkSignIn, async (req, res, next) => {
+    var usermail = req.session.user.email
+    console.log('QCMID ' + req.query.qcmID)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )
+    const db = client.db('gl52')
+    /*const collection2 = db.collection('groups')
+    const userGrps = await collection2.find({ gestionnaire: usermail }).toArray()
+    const UserGrpsNames = userGrps.map((grp, index) => {
+        return grp.name
+    })*/
+    const collection = db.collection('questionnaires')
+    const arr = await collection.find({ author: usermail}).toArray()
+    const quizarrtitle = arr.map((qcm, index) => {
+        return qcm.title
+    })
+    const collection3 = db.collection('answers')
+    const UserAnswer = await collection3.find({ title: { $in: quizarrtitle }}).toArray()
+    /*const UserAnswersQuiz = UserAnswer.map((ans, index) => {
+        return ans.title
+    })*/
+    //console.log(UserAnswersQuiz)
+    client.close()
+    //console.log(quizarr)
+    res.render('viewStudentsResults', {
+        chemin: 'Quiz',
+        title: 'Results',
+        quiz: UserAnswer,
+        role: req.session.user.role
+    })
+})
+
+router.get('/delete/:quiz_id', checkSignIn, async (req, res, next) => {
+    console.log(req.params.quiz_id)
+    const client = await MongoClient.connect(
+        URL,
+        { useNewUrlParser: true }
+    )	
+    const db = client.db('gl52')
+    const collection2 = db.collection('questionnaires')
+    collection2.deleteOne({_id: ObjectId(req.params.quiz_id) })
+    res.render('closeitself', {
+        chemin: 'Quiz',
+        title: 'NTM',
+    })
+})
+
+function checkSignIn(req, res, next) {
+    if (req.session.user) {
+        next();     //If session exists, proceed to page
+    } else {
+        var err = new Error("Not logged in!");
+        console.log(req.session.user);
+        res.redirect('/login');
+        //next(err);  //Error, trying to access unauthorized page!
+    }
+}
 
 module.exports = router

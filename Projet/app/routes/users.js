@@ -3,22 +3,22 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb')
 const _ = require('lodash')
-var session = require('express-session');
+var session = require('express-session')
 
 const URL = 'mongodb://devgl52:kkgfFbXM6XR0d2tk@database-shard-00-00-kldkd.mongodb.net:27017,database-shard-00-01-kldkd.mongodb.net:27017,database-shard-00-02-kldkd.mongodb.net:27017/test?ssl=true&replicaSet=Database-shard-0&authSource=admin&retryWrites=true'
 
 /* GET users listing. */
 router.get('/', checkSignIn, async (req, res, next) => {
-    var username = req.session.user.name
+    var usermail = req.session.user.email
     const client = await MongoClient.connect(
         URL,
         { useNewUrlParser: true }
     )
     const db = client.db('gl52')
     const collection = db.collection('users')
-    const userinfo = await collection.findOne({ name: username })
+    const userinfo = await collection.findOne({ email: usermail })
     const collection2 = db.collection('groups')
-    const arr2 = await collection2.find({ users: username}).toArray()
+    const arr2 = await collection2.find({ users: usermail}).toArray()
     const grpsarr = arr2.map((qcm, index) => {
         return qcm
     })
@@ -28,7 +28,8 @@ router.get('/', checkSignIn, async (req, res, next) => {
         chemin: 'Settings',
         title: 'Profil',
         profil: userinfo,
-        groups: grpsarr
+        groups: grpsarr,
+        role: req.session.user.role
     });
 });
 

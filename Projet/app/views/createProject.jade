@@ -8,10 +8,10 @@ block content
       .card-body.card-block
         form(action='/projects/new', method='POST',id='prj')
           label Project Name
-          input.form-control(type='text', name='nomprj', placeholder='Name')
+          input.form-control(type='text', name='nomprj', placeholder='Name', required)
           br
           label Authorized groups
-          select.form-control(name='usersgrp', multiple='multiple') 
+          select.form-control(name='usersgrp', multiple='multiple', required) 
             for g in groups
               option(value='#{g.name}')= g.name
           br

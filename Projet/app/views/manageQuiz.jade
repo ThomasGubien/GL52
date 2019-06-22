@@ -19,11 +19,11 @@ block content
                   td= q.title
                   td.t(style='width:40%')
                     for g in q.groups                      
-                      a= g
+                      a #{g.name}
                   td.t(style='width:30%')
                     button.btn.btn-warning.btn-sm(type='modify')
                       i.fa.fa-pencil
-                    button.btn.btn-danger.btn-sm(type='delete')
+                    button.btn.btn-danger.btn-sm(type='delete' onclick="window.open('/quiz/delete/#{q._id}', '_blank');")
                       i.fa.fa-trash
                     button.btn.btn-dark.btn-sm(type='close')
                       i.fa.fa-ban
